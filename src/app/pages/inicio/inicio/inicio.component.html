@@ -1,0 +1,3 @@
+<app-inicio-adm-docente
+  *ngIf="perfilUsuario === 'administrador' || perfilUsuario === 'docente'"></app-inicio-adm-docente>
+<app-inicio-aluno *ngIf="perfilUsuario === 'aluno'"></app-inicio-aluno>

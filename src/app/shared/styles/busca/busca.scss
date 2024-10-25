@@ -1,0 +1,37 @@
+.pesquisa-container {
+  display: grid;
+  gap: 8px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+.pesquisa {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pesquisa input {
+  padding: 8px; 
+  border: 1px solid #ddd; 
+  border-radius: 4px;
+  outline: none;
+  font-size: 14px;
+  color: #333; 
+}
+
+.pesquisa input:focus {
+  border-color: #3b3054;
+}
+
+button {
+  padding: 8px 12px;
+  background-color: #3b3054;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Poppins', Arial, sans-serif;
+}

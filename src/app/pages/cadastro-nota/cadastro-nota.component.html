@@ -1,0 +1,76 @@
+<div class="formulario">
+  <form (ngSubmit)="onSubmit()" [formGroup]="cadastroForm">
+
+    <div class="campo">
+      <label for="aluno">Aluno*</label>
+      <select id="aluno" name="aluno" formControlName="aluno">
+        <option *ngFor="let aluno of listagemAlunos" [value]="aluno.id">
+          {{ aluno.nome }}
+        </option>
+      </select>
+      <span *ngIf="(cadastroForm.controls['aluno'].touched) &&cadastroForm.controls['aluno'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="docente">Docente*</label>
+      <select *ngIf="perfilUsuarioLogado === 'administrador'" id="docente" name="docente" formControlName="docente">
+        <option *ngFor="let docente of listagemDocentes" [value]="docente.id">
+          {{ docente.nome }}
+        </option>
+      </select>
+      <select *ngIf="perfilUsuarioLogado === 'docente'" id="docente" name="docente" formControlName="docente">
+        <option [value]="dadosDocenteLogado.id">{{dadosDocenteLogado.nome}}</option>
+      </select>
+      <span *ngIf="(cadastroForm.controls['docente'].touched) &&cadastroForm.controls['docente'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="materia">Materia*</label>
+      <select id="materia" name="materia" formControlName="nomeMateria">
+        <option *ngFor="let materia of listagemMaterias" [value]="materia.nome">
+          {{ materia.nome }}
+        </option>
+      </select>
+      <span
+        *ngIf="(cadastroForm.controls['nomeMateria'].touched) &&cadastroForm.controls['nomeMateria'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="avaliacao">Nome Avaliação*</label>
+      <input id="avaliacao" name="avaliacao" formControlName="nomeAvaliacao">
+      <span
+        *ngIf="(cadastroForm.controls['nomeAvaliacao'].touched) &&cadastroForm.controls['nomeAvaliacao'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="dataAvaliacao">Data da Avaliação*</label>
+      <input type="date" id="dataAvaliacao" name="dataAvaliacao" formControlName="dataAvaliacao">
+      <span
+        *ngIf="(cadastroForm.controls['dataAvaliacao'].touched) &&cadastroForm.controls['dataAvaliacao'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="valorNota">Valor da nota*</label>
+      <input type="number" id="valorNota" name="valorNota" formControlName="valorNota">
+      <span
+        *ngIf="(cadastroForm.controls['valorNota'].touched) &&cadastroForm.controls['valorNota'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span *ngIf="cadastroForm.controls['valorNota'].touched && cadastroForm.controls['valorNota'].errors?.['min']"
+        appLabelErro>O valor mínimo é 0</span>
+      <span *ngIf="cadastroForm.controls['valorNota'].touched && cadastroForm.controls['valorNota'].errors?.['max']"
+        appLabelErro>O valor máximo é 10</span>
+    </div>
+
+    <div class="botao">
+      <button type="submit">Cadastrar</button>
+      <button type="button" [disabled]="true">Editar</button>
+      <button type="button" [disabled]="true">Excluir</button>
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,21 @@
+<div class="menu-lateral" [ngClass]="{'mostrarMenu': menuExpandido}">
+  <div class="menu-fixo">
+    <button class="toggle-botao" (click)="menuexpandir()">
+      &#9776;
+    </button>
+  </div>
+  <div class="menu-expansivel">
+    <ul>
+      <li><a [routerLink]="['/inicio']">Início</a></li>
+      <li *ngIf="perfilUsuario === 'administrador'"><a [routerLink]="['/cadastro-docente']">Cadastrar Docente</a></li>
+      <li *ngIf="perfilUsuario === 'administrador'"><a [routerLink]="['/cadastro-aluno']">Cadastrar Aluno</a></li>
+      <li *ngIf="perfilUsuario === 'administrador' || perfilUsuario === 'docente'"><a
+          [routerLink]="['/cadastro-turma']">Cadastrar Turma</a></li>
+      <li *ngIf="perfilUsuario === 'administrador' || perfilUsuario === 'docente'"><a
+          [routerLink]="['/cadastro-nota']">Cadastrar Avaliação</a></li>
+      <li *ngIf="perfilUsuario === 'administrador'"><a [routerLink]="['/listagem-docentes']">Listagem Docentes</a></li>
+      <li *ngIf="perfilUsuario === 'aluno'"><a [routerLink]="['/notas']">Notas do aluno</a></li>
+    </ul>
+    <button class="logout" (click)="botaoDeslogar()">Sair</button>
+  </div>
+</div>

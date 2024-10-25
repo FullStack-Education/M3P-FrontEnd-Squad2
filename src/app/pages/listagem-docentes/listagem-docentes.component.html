@@ -1,0 +1,31 @@
+<main>
+  <section class="pesquisa-container">
+    <h4>Pesquisar Docente:</h4>
+    <div class="pesquisa">
+      <input type="text" [(ngModel)]="textoPesquisa">
+      <button (click)="pesquisar()">Pesquisar</button>
+    </div>
+
+    <div class="tabela-pesquisa">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Contato</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of listagemUsuariosPesquisa">
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.nome }}</td>
+            <td>{{ usuario.telefone }}</td>
+            <td><a [href]="usuario.acao">Ver mais</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</main>

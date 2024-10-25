@@ -1,0 +1,30 @@
+<main>
+  <section class="sessao">
+    <h2>Avaliações</h2>
+    <div class="cards-sessao">
+      <div class="card avaliacao" *ngFor="let item of dadosMinhasAvaliacoes" [routerLink]="[item.acao]">
+        <h3>{{item.nomeAvaliacao}}</h3>
+        <p>{{item.nomeMateria}}</p>
+        <p>{{item.data | date: 'dd/MM/yyyy'}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sessao">
+    <h2>Minhas Matérias</h2>
+    <div class="cards-sessao">
+      <div class="card" *ngFor="let item of  materiasDosDocentes | slice:0:3">
+        <h3>{{item.nomeMateria}}</h3>
+      </div>
+    </div>
+  </section>
+
+  <section class="sessao">
+    <h2>Cursos Extras</h2>
+    <div class="cards-sessao">
+      <div class="card" *ngFor="let item of listaCursosExtras">
+        <h3>{{item.nomeCurso}}</h3>
+      </div>
+    </div>
+  </section>
+</main>

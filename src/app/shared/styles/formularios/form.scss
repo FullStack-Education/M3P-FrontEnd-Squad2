@@ -1,0 +1,124 @@
+.formulario {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  background-color: rgba(245, 245, 245, 0.8);
+  padding: 30px 40px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px; 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  width: 100%;
+  max-width: 800px; 
+}
+
+.campo {
+  margin-bottom: 20px; 
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo label {
+  font-weight: bold;
+  color: #3b3054; 
+  margin-bottom: 5px; 
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 16px; 
+  color: #333;
+}
+
+
+button {
+  padding: 12px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #3b3054;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(50, 22, 76);
+}
+
+button:disabled {
+  background-color: #d6d6d6; 
+  color: #a0a0a0;
+  cursor: not-allowed; 
+  opacity: 0.6; 
+}
+
+.botao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.ng-select {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.ng-select .ng-select-container {
+  border-radius: 5px;
+}
+
+.ng-select .ng-select-container .ng-select-placeholder {
+  color: #888;
+}
+
+.ng-select .ng-select-container .ng-value {
+  background-color: rgb(104, 79, 127);
+  color: #fff;
+}
+
+.ng-select .ng-dropdown-panel {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 350px) {
+  form {
+    padding: 10px 20px; 
+    font-size: 12px; 
+  }
+
+  .campo {
+    margin-bottom: 20px;
+  }
+
+  .campo label {
+    font-size: 12px;
+  }
+
+  input, select, .ng-select {
+    font-size: 12px;
+  }
+
+  button {
+    font-size: 12px; 
+    padding: 10px 15px;
+  }
+}

@@ -1,0 +1,97 @@
+.menu-lateral {
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  height: 100vh;
+  color: rgba(255, 255, 255, 0.8); 
+  font-family: 'Poppins', Arial, sans-serif; 
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, #1e1e1e, #292929);
+}
+
+.menu-fixo {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.toggle-botao {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.menu-expansivel {
+  display: none;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.menu-expansivel ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-expansivel ul li {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-expansivel ul li a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.menu-expansivel a {
+  padding: 5px;
+}
+
+.menu-expansivel ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-lateral.mostrarMenu {
+  padding-right: 10px;
+}
+
+.menu-lateral.mostrarMenu .menu-expansivel {
+  display: block;
+}
+
+.logout {
+  display: grid;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px;
+  color: white;
+  width: 100%;
+  background-color: rgb(52, 40, 91);
+  border: none;
+  font-family: 'Poppins', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.logout:hover {
+  background-color: rgb(99, 76, 173);
+}
+
+@media (max-width: 450px) {
+  .menu-expansivel ul li a {
+    font-size: 10px;
+  }
+
+  .logout {
+    font-size: 10px;
+  }
+}
+

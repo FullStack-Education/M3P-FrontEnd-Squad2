@@ -1,0 +1,161 @@
+<div class="formulario">
+  <form (ngSubmit)="onSubmit()" [formGroup]="cadastroForm">
+
+    <div class="campo">
+      <label for="nome">Nome*</label>
+      <input id="nome" name="nome" formControlName="nome">
+      <span *ngIf="(cadastroForm.controls['nome'].touched) &&cadastroForm.controls['nome'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span *ngIf="(cadastroForm.controls['nome'].touched) && cadastroForm.controls['nome'].errors?.['minlength']"
+        appLabelErro>
+        O nome deve ter pelo menos 8 caracteres.
+      </span>
+      <span *ngIf="(cadastroForm.controls['nome'].touched) && cadastroForm.controls['nome'].errors?.['maxlength']"
+        appLabelErro>
+        O nome deve ter no máximo 64 caracteres.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="email">Email</label>
+      <input id="email" name="email" formControlName="email">
+      <span *ngIf="(cadastroForm.controls['email'].touched) && cadastroForm.controls['email'].errors?.['email']"
+        appLabelErro>Formato de email inválido!</span>
+    </div>
+
+    <div class="campo">
+      <label for="senha">Senha*</label>
+      <input type="password" id="senha" name="senha" formControlName="senha">
+      <span *ngIf="(cadastroForm.controls['senha'].touched) && cadastroForm.controls['senha'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span *ngIf="(cadastroForm.controls['senha'].touched) && cadastroForm.controls['senha'].errors?.['minlength']"
+        appLabelErro>
+        O nome deve ter pelo menos 8 caracteres.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="telefone">Telefone*</label>
+      <input id="telefone" name="telefone" formControlName="telefone" mask="(00) 0 0000-00000">
+      <span *ngIf="(cadastroForm.controls['telefone'].touched) &&cadastroForm.controls['telefone'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span
+        *ngIf="(cadastroForm.controls['telefone'].touched) && cadastroForm.controls['telefone'].errors?.['minlength']"
+        appLabelErro>
+        O campo deve ter pelo menos 12 números.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="genero">Gênero*</label>
+      <select id="genero" name="genero" formControlName="genero">
+        <option value="Feminino">Feminino</option>
+        <option value="Masculino">Masculino</option>
+      </select>
+      <span *ngIf="(cadastroForm.controls['genero'].touched) &&cadastroForm.controls['genero'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label>Turmas*</label>
+      <ng-select id="turma" formControlName="turma" [items]="listagemTurmas2" bindLabel="nomeTurma" bindValue="id"
+        [multiple]="true" placeholder="Selecione as turmas" [closeOnSelect]="false">
+      </ng-select>
+      <span *ngIf="(cadastroForm.controls['turma'].touched) &&cadastroForm.controls['turma'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="dataNascimento">Data nascimento*</label>
+      <input type="date" id="dataNascimento" name="dataNascimento" formControlName="dataNascimento">
+      <span
+        *ngIf="(cadastroForm.controls['dataNascimento'].touched) &&cadastroForm.controls['dataNascimento'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+
+      <span
+        *ngIf="(cadastroForm.controls['dataNascimento'].touched) &&cadastroForm.controls['dataNascimento'].errors?.['dataInvalida']"
+        appLabelErro>Data futura não é valida!</span>
+    </div>
+
+    <div class="campo">
+      <label for="cpf">CPF*</label>
+      <input id="cpf" name="cpf" formControlName="cpf" mask="000.000.000-00">
+      <span *ngIf="(cadastroForm.controls['cpf'].touched) &&cadastroForm.controls['cpf'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span *ngIf="(cadastroForm.controls['cpf'].touched) && cadastroForm.controls['cpf'].errors?.['minlength']"
+        appLabelErro>
+        O campo deve ter pelo menos 11 números.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="rg">RG com orgão expeditor*</label>
+      <input id="rg" name="rg" formControlName="rg">
+      <span *ngIf="(cadastroForm.controls['rg'].touched) &&cadastroForm.controls['rg'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span *ngIf="(cadastroForm.controls['rg'].touched) && cadastroForm.controls['rg'].errors?.['maxlength']"
+        appLabelErro>
+        O RG deve ter no máximo 20 caracteres.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="naturalidade">Naturalidade*</label>
+      <input id="naturalidade" name="naturalidade" formControlName="naturalidade">
+      <span
+        *ngIf="(cadastroForm.controls['naturalidade'].touched) &&cadastroForm.controls['naturalidade'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span
+        *ngIf="(cadastroForm.controls['naturalidade'].touched) && cadastroForm.controls['naturalidade'].errors?.['minlength']"
+        appLabelErro>
+        O campo deve ter pelo menos 8 caracteres.
+      </span>
+      <span
+        *ngIf="(cadastroForm.controls['naturalidade'].touched) && cadastroForm.controls['naturalidade'].errors?.['maxlength']"
+        appLabelErro>
+        O campo deve ter no máximo 64 caracteres.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="cep">CEP</label>
+      <input id="cep" name="cep" formControlName="cep" (blur)="buscarCep()">
+    </div>
+    <div class="campo">
+      <label for="logradouro">Rua</label>
+      <input id="logradouro" name="logradouro" formControlName="logradouro">
+    </div>
+    <div class="campo">
+      <label for="numero">Número</label>
+      <input id="numero" name="numero" formControlName="numero">
+    </div>
+    <div class="campo">
+      <label for="complemento">Complemento</label>
+      <input id="complemento" name="complemento" formControlName="complemento">
+    </div>
+    <div class="campo">
+      <label for="bairro">Bairro</label>
+      <input id="bairro" name="bairro" formControlName="bairro">
+    </div>
+    <div class="campo">
+      <label for="localidade">Cidade</label>
+      <input id="localidade" name="localidade" formControlName="localidade">
+    </div>
+    <div class="campo">
+      <label for="uf">Estado</label>
+      <input id="uf" name="uf" formControlName="uf">
+    </div>
+    <div class="campo">
+      <label for="referencia">Ponto de referência</label>
+      <input id="referencia" name="referencia" formControlName="referencia">
+    </div>
+
+
+    <div class="botao">
+      <button type="submit" *ngIf="!id">Cadastrar</button>
+      <button type="submit" [disabled]="!id">Editar</button>
+      <button type="button" [disabled]="!id" (click)="excluir()">Excluir</button>
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,83 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  background-color: rgb(12, 5, 33);
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Poppins', Arial, sans-serif;
+  padding: 10px 50px;
+}
+
+.toolbar h1, .toolbar h2 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.8em;
+  letter-spacing: 2px; 
+  color: rgba(255, 255, 255, 0.9); 
+}
+
+h2 {
+  font-size: 1.6em;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7); 
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-nome {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.8); 
+}
+
+img {
+  width: 35px;
+}
+
+@media (max-width: 600px) {
+  .toolbar {
+    padding: 10px 30px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1em;
+  }
+
+  .user-nome {
+    font-size: 0.9em;
+  }
+
+  img {
+    width: 30px;
+  }
+}
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 1.0em;
+  }
+
+  h2 {
+    font-size: 0.7em;
+  }
+
+  .user-nome {
+    font-size: 0.6em;
+  }
+
+  img {
+    width: 20px;
+  }
+}

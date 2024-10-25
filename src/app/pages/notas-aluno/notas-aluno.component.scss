@@ -1,0 +1,55 @@
+@import "../../shared/styles/tabelas/tabela";
+
+main {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+}
+
+.info-aluno,
+.info-turma,
+.notas {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+}
+
+.info-aluno h2,
+.info-turma h2,
+.notas h2 {
+  font-family: 'Poppins', Arial, sans-serif; 
+  font-size: 24px; 
+  font-weight: 600; 
+  color: #333; 
+  border-bottom: 2px solid #ddd; 
+  padding-bottom: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.info-aluno p,
+.info-turma p {
+  font-size: 14px;
+  color: #333; 
+}
+
+
+
+@media (max-width: 530px) {
+  th,
+  td {
+    font-size: 10px;
+    padding: 3px;
+  }
+  h2,
+  p {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,66 @@
+<div class="formulario">
+  <form (ngSubmit)="onSubmit()" [formGroup]="cadastroForm">
+
+    <div class="campo">
+      <label for="nomeTurma">Nome da Turma*</label>
+      <input id="nomeTurma" name="nomeTurma" formControlName="nomeTurma">
+      <span
+        *ngIf="(cadastroForm.controls['nomeTurma'].touched) &&cadastroForm.controls['nomeTurma'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+      <span
+        *ngIf="(cadastroForm.controls['nomeTurma'].touched) && cadastroForm.controls['nomeTurma'].errors?.['minlength']"
+        appLabelErro>
+        O nome deve ter pelo menos 8 caracteres.
+      </span>
+      <span
+        *ngIf="(cadastroForm.controls['nomeTurma'].touched) && cadastroForm.controls['nomeTurma'].errors?.['maxlength']"
+        appLabelErro>
+        O nome deve ter no máximo 64 caracteres.
+      </span>
+    </div>
+
+    <div class="campo">
+      <label for="docente">Docente*</label>
+      <select *ngIf="perfilUsuarioLogado === 'administrador'" id="docente" name="docente" formControlName="docente">
+        <option *ngFor="let docente of listagemDocentes" [value]="docente.id">
+          {{ docente.nome }}
+        </option>
+      </select>
+      <select *ngIf="perfilUsuarioLogado === 'docente'" id="docente" name="docente" formControlName="docente">
+        <option [value]="dadosDocenteLogado.id">{{dadosDocenteLogado.nome}}</option>
+      </select>
+      <span *ngIf="(cadastroForm.controls['docente'].touched) &&cadastroForm.controls['docente'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="dataInicio">Data de início*</label>
+      <input type="date" id="dataInicio" name="dataInicio" formControlName="dataInicio">
+      <span
+        *ngIf="(cadastroForm.controls['dataInicio'].touched) &&cadastroForm.controls['dataInicio'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="dataTermino">Data de termino*</label>
+      <input type="date" id="dataTermino" name="dataTermino" formControlName="dataTermino">
+      <span
+        *ngIf="(cadastroForm.controls['dataTermino'].touched) &&cadastroForm.controls['dataTermino'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="horario">Horário*</label>
+      <input type="time" id="horario" name="horario" formControlName="horario">
+      <span *ngIf="(cadastroForm.controls['horario'].touched) &&cadastroForm.controls['horario'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="botao">
+      <button type="submit">Cadastrar</button>
+      <button type="button" [disabled]="true">Editar</button>
+      <button type="button" [disabled]="true">Excluir</button>
+    </div>
+
+  </form>
+</div>

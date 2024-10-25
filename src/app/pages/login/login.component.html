@@ -1,0 +1,31 @@
+<section class="paginaLogin">
+
+  <div class="imagemLogin">
+    <div class="tituloLogin">
+      <h1>LabPCP</h1>
+    </div>
+    <img src="/assets/imagem/login-imagem3.png" alt="Imagem Login">
+  </div>
+
+  <div class="login-section">
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <h2>Login</h2>
+      <div class="campo">
+        <label for="email">Email</label>
+        <input id="email" name="email" [(ngModel)]="loginFormModel.email" #email="ngModel">
+      </div>
+
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" [(ngModel)]="loginFormModel.senha" #senha="ngModel">
+      </div>
+
+      <div class="botao">
+        <button type="submit" class="bt-entrar">Entrar</button>
+        <button type="button" (click)="esqueciSenha()">Esqueci a senha</button>
+        <button type="button" (click)="criarConta()">Criar conta</button>
+      </div>
+    </form>
+  </div>
+
+</section>
