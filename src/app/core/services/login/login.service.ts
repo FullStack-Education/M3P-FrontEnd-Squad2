@@ -12,8 +12,7 @@ import { UsuarioInterface } from '../../../shared/interfaces/usuario.interface';
   providedIn: 'root',
 })
 export class LoginService {
-  // usada antes com json serve:
-  //url = `${environment.apiUrl}/usuarios`;
+
 
   private url = '/api/login';
 
@@ -61,25 +60,6 @@ export class LoginService {
       );
   }
 
-  // antes usado com json serve:
-  /*
-  login(usuario : {email: string, senha: string}){
-    getUsuarioLogadoByEmail(usuario.email).subscribe((retorno)=> {
-      if(retorno){
-        if(retorno.senha === usuario.senha){
-          sessionStorage.setItem('idUsuarioLogado', retorno.id);
-          sessionStorage.setItem('perfilUsuarioLogado', retorno.perfil);
-          this.router.navigate(['/inicio']);
-        } else {
-          alert("Email e/ou senha incorretos")
-        }
-      } else {
-        alert("Email e/ou senha incorretos")
-      }
-    })
-  }
-
-  */
 
   logout() {
     sessionStorage.removeItem('token');
