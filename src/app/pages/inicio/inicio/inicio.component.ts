@@ -14,6 +14,6 @@ export class InicioComponent implements OnInit {
   perfilUsuario: string | null = null;
 
   ngOnInit(): void {
-    this.perfilUsuario = sessionStorage.getItem('perfilUsuarioLogado');
+    this.perfilUsuario = sessionStorage.getItem('perfil');
   }
 }

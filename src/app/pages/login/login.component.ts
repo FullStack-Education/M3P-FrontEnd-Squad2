@@ -19,11 +19,32 @@ export class LoginComponent {
 
   constructor(private loginService: LoginService, private router: Router) {}
 
+  // antes usado esse com json serve
+  /*
   onSubmit() {
     if (this.loginFormModel.email == '' || this.loginFormModel.senha == '') {
       alert('Todos os campos precisam ser preenchidos');
     } else {
       this.loginService.login(this.loginFormModel);
+    }
+  }
+  */
+
+  onSubmit() {
+    console.log('Login data being sent:', this.loginFormModel);
+    if (this.loginFormModel.email && this.loginFormModel.senha) {
+      this.loginService.login(this.loginFormModel).subscribe(
+        (response) => {
+          console.log('Login successful:', response);
+         // this.router.navigate(['/teste']);
+          this.router.navigate(['/inicio']);
+        },
+        (error) => {
+          alert('Login falhou. Verifique seu e-mail e senha.');
+        }
+      );
+    } else {
+      alert('Todos os campos precisam ser preenchidos');
     }
   }
 

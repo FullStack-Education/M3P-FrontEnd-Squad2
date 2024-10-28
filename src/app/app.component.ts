@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import { CommonModule } from '@angular/common';
 import { MenuLateralComponent } from './shared/components/menuLateral/menu-lateral/menu-lateral.component';
-import { UsuarioService } from './core/services/usuario/usuario.service';
+import { LoginService } from './core/services/login/login.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     nomeUsuario: '',
   };
 
-  constructor(private router: Router, private usuarioService: UsuarioService) {}
+  constructor(private router: Router,  private loginService: LoginService) {}
 
   ngOnInit() {
     this.router.events.subscribe((retorno) => {
@@ -34,10 +34,10 @@ export class AppComponent implements OnInit {
   }
 
   private buscaNomeUsuario() {
-    const idUsuario = this.usuarioService.getIdUsuarioLogado();
+    const idUsuario = this.loginService.getIdUsuarioLogado();
 
     if (idUsuario) {
-      this.usuarioService.getNomeUsuarioLogado(idUsuario).subscribe((nome) => {
+      this.loginService.getNomeUsuarioLogado(idUsuario).subscribe((nome) => {
         this.toolbarDados.nomeUsuario = nome;
       });
     }
