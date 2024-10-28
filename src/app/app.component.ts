@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  
   private buscaNomeUsuario() {
     const idUsuario = this.loginService.getIdUsuarioLogado();
 

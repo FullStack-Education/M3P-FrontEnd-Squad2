@@ -110,7 +110,7 @@ export class LoginService {
   }
 
   getIdUsuarioLogado(): string | null {
-    return sessionStorage.getItem('userId');
+    return sessionStorage.getItem('id');
   }
 
   getNomeUsuarioLogado(id: string): Observable<string> {

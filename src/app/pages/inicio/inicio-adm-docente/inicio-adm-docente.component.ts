@@ -59,7 +59,7 @@ export class InicioAdmDocenteComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.perfilUsuario = sessionStorage.getItem('perfilUsuarioLogado');
+    this.perfilUsuario = sessionStorage.getItem('userId');
     this.buscarQuantidadeAlunos();
     this.buscarQuantidadeDocentes();
     this.buscarQuantidadeTurmas();
