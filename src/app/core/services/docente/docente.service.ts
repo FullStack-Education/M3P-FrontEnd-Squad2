@@ -13,6 +13,7 @@ export class DocenteService {
 
   constructor(private httpClient: HttpClient) {}
 
+ 
   getDocentes(): Observable<DocenteInterface[]> {
     return this.httpClient
       .get<DocenteInterface[]>(this.url)

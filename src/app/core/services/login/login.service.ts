@@ -49,7 +49,8 @@ export class LoginService {
             sessionStorage.setItem('userId', userId);
             sessionStorage.setItem('perfil', nome);
 
-            this.router.navigate(['/teste']);
+            this.router.navigate(['/inicio']);
+            
           }
           return response;
         }),

@@ -22,15 +22,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginFormModel.email && this.loginFormModel.senha) {
-      this.loginService.login(this.loginFormModel).subscribe(
-        (response) => {
-         // this.router.navigate(['/teste']);
-          this.router.navigate(['/inicio']);
-        },
-        (error) => {
-          alert('Login falhou. Verifique seu e-mail e senha.');
-        }
-      );
+      this.loginService.login(this.loginFormModel).subscribe();
     } else {
       alert('Todos os campos precisam ser preenchidos');
     }
