@@ -8,8 +8,7 @@ import { environment } from '../../../shared/environments/environment';
   providedIn: 'root',
 })
 export class TurmaService {
- 
-  url = `${environment.apiUrl}/turmas`
+  url = `${environment.apiUrl}/turmas`;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -23,14 +22,6 @@ export class TurmaService {
 
   postTurma(usuario: TurmaInterface) {
     return this.httpClient.post<any>(this.url, usuario);
-  }
-
-  putTurma(usuario: TurmaInterface) {
-    return this.httpClient.put<any>(this.url + `/${usuario.id}`, usuario);
-  }
-
-  deleteTurma(id: string) {
-    return this.httpClient.delete<any>(this.url + `/${id}`);
   }
 
   verificarDocenteEmTurmas(docenteId: string) {

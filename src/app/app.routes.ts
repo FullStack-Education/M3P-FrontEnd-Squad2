@@ -8,6 +8,7 @@ import { CadastroNotaComponent } from './pages/cadastro-nota/cadastro-nota.compo
 import { ListagemDocentesComponent } from './pages/listagem-docentes/listagem-docentes.component';
 import { NotasAlunoComponent } from './pages/notas-aluno/notas-aluno.component';
 import { usuarioLogadoGuard } from './core/guards/usuario-logado.guard';
+import { TesteComponent } from './pages/teste/teste.component';
 
 export const routes: Routes = [
   {
@@ -63,5 +64,9 @@ export const routes: Routes = [
     path: 'notas',
     component: NotasAlunoComponent,
     canActivate: [usuarioLogadoGuard],
+  },
+  {
+    path: 'teste',
+    component: TesteComponent,
   },
 ];

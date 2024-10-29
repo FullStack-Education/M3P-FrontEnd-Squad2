@@ -8,18 +8,9 @@ import { environment } from '../../../shared/environments/environment';
   providedIn: 'root',
 })
 export class NotaService {
- 
-  url = `${environment.apiUrl}/notas`
+  url = `${environment.apiUrl}/notas`;
 
   constructor(private httpClient: HttpClient) {}
-
-  getNotas() {
-    return this.httpClient.get<Array<NotaInterface>>(this.url);
-  }
-
-  getNotaById(id: string) {
-    return this.httpClient.get<NotaInterface>(this.url + `/${id}`);
-  }
 
   getNotasByIdAluno(idAluno: string) {
     return this.httpClient.get<Array<NotaInterface>>(this.url, {
@@ -31,14 +22,6 @@ export class NotaService {
 
   postNota(nota: NotaInterface) {
     return this.httpClient.post<any>(this.url, nota);
-  }
-
-  putNota(nota: NotaInterface) {
-    return this.httpClient.put<any>(this.url + `/${nota.id}`, nota);
-  }
-
-  deleteNota(id: string) {
-    return this.httpClient.delete<any>(this.url + `/${id}`);
   }
 
   verificarDocenteEmNotas(docenteId: string) {

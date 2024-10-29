@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { InformacaoAluno } from '../../shared/interfaces/aluno.interface';
 import { InformacaoTurma } from '../../shared/interfaces/turma.interface';
-import { UsuarioService } from '../../core/services/usuario/usuario.service';
 import { AlunoService } from '../../core/services/aluno/aluno.service';
 import { NotaService } from '../../core/services/nota/nota.service';
 import { CommonModule } from '@angular/common';
 import { DocenteService } from '../../core/services/docente/docente.service';
 import { TelefonePipe } from '../../core/pipes/telefone/telefone.pipe';
+import { LoginService } from '../../core/services/login/login.service';
 
 @Component({
   selector: 'app-notas-aluno',
@@ -37,14 +37,14 @@ export class NotasAlunoComponent implements OnInit {
   }> = [];
 
   constructor(
-    private usuarioService: UsuarioService,
+    private loginService: LoginService,
     private alunoService: AlunoService,
     private notaService: NotaService,
     private docenteService: DocenteService
   ) {}
 
   ngOnInit(): void {
-    this.idAluno = this.usuarioService.getIdUsuarioLogado();
+    this.idAluno = this.loginService.getIdUsuarioLogado();
 
     if (this.idAluno) {
       this.buscarAluno(this.idAluno);

@@ -10,24 +10,11 @@ No terminal, execute os seguintes comandos:
 
 1. **Iniciar o servidor Angular:**
    ```bash
-   ng serve
+   ng serve --proxy-config proxy.conf.json
 
 Isso iniciará a aplicação e gerará uma URL para você navegar.
 
-2. **Iniciar o servidor JSON:**
-   ```bash
-   json-server ./src/db/db.json
 
-Isso iniciará o JSON Server para fornecer dados para a aplicação.
-
-Isso iniciará o JSON Server para fornecer dados para a aplicação.
-
-**Observação:** Caso o JSON Server não utilize a porta padrão 3000, você precisará atualizar a configuração da aplicação para corresponder à nova porta. Para isso:
-
-1. Abra o arquivo `environment.ts` localizado em `src/app/shared/environments`.
-2. Substitua o valor da variável `apiUrl` pela nova porta informada pelo JSON Server.
-
-   Por exemplo, se o JSON Server estiver rodando na porta 4000, altere o valor de `apiUrl` para `http://localhost:4000`.
 
 
 ## Funcionamento
