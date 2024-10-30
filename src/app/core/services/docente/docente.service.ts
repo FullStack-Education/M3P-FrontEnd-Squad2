@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DocenteInterface} from '../../../shared/interfaces/docente.interface';
+import { DocenteInterface, DocenteInterfaceResponse} from '../../../shared/interfaces/docente.interface';
 import { map, Observable } from 'rxjs';
 
 
@@ -14,13 +14,13 @@ export class DocenteService {
   constructor(private httpClient: HttpClient) {}
 
   // novo metodo de busca por docentes usando a API spring
-  getDocentes(): Observable<DocenteInterface[]> {
+  getDocentes(): Observable<DocenteInterfaceResponse[]> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
   
-    return this.httpClient.get<DocenteInterface[]>(`${this.url}/buscar`, { headers });
+    return this.httpClient.get<DocenteInterfaceResponse[]>(`${this.url}/buscar`, { headers });
   }
 
   //metodo para saber o id de docente do usuario logado 
@@ -28,7 +28,7 @@ export class DocenteService {
   getIdDocentePeloIdUser(userId: string): Observable<string | null> {
     return this.getDocentes().pipe(
       map(docentes => {
-        const docente = docentes.find(d => d.usuario.id === userId);
+        const docente = docentes.find(d => d.usuario.id.toString() === userId.toString());
         return docente ? docente.id : null;
       })  
     );

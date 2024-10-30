@@ -1,5 +1,7 @@
 import { TurmaInterface } from "./turma.interface";
-import { UsuarioLogadoInterface } from "./usuarioLogado.interface";
+import { UsuarioInterface, UsuarioInterfaceRequest, UsuarioInterfaceResponse } from "./usuarios.interface";
+
+
 
 export interface AlunoInterface {
   id: string;
@@ -20,7 +22,7 @@ export interface AlunoInterface {
   localidade: string;
   uf: string;
   referencia: string;
-  usuario: UsuarioLogadoInterface;
+  usuario: UsuarioInterface;
 }
 
 export interface InformacaoAluno {
@@ -31,3 +33,45 @@ export interface InformacaoAluno {
   cpf: string;
 }
 
+export interface AlunoInterfaceRequest {
+  nome: string;
+  perfil: string
+  telefone: string;
+  genero: string;
+  turma: TurmaInterface[];
+  dataNascimento: string;
+  cpf: string;
+  rg: string;
+  naturalidade: string;
+  cep: string;
+  logradouro: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  referencia: string;
+  usuario: UsuarioInterfaceRequest;
+}
+
+export interface AlunoInterfaceResponse {
+  id: number;
+  nome: string;
+  perfil: string
+  telefone: string;
+  genero: string;
+  turma: TurmaInterface[];
+  dataNascimento: string;
+  cpf: string;
+  rg: string;
+  naturalidade: string;
+  cep: string;
+  logradouro: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  referencia: string;
+  usuario: UsuarioInterfaceResponse;
+}      
