@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { AlunoInterface } from '../../../shared/interfaces/aluno.interface';
-import { environment } from '../../../shared/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'

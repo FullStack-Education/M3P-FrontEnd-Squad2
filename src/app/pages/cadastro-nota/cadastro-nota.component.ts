@@ -73,7 +73,7 @@ export class CadastroNotaComponent implements OnInit {
   obterDocentes() {
     this.docenteService.getDocentes().subscribe((docentes) => {
       this.listagemDocentes = docentes.map((docente) => ({
-        id: docente.id,
+        id: docente.id.toString(),
         nome: docente.nome,
       }));
     });
@@ -92,7 +92,7 @@ export class CadastroNotaComponent implements OnInit {
   obterAlunos() {
     this.alunoService.getAlunos().subscribe((alunos) => {
       this.listagemAlunos = alunos.map((aluno) => ({
-        id: aluno.id,
+        id: aluno.id.toString(),
         nome: aluno.nome,
       }));
     });

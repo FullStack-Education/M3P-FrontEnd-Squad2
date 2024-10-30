@@ -1,29 +1,41 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DocenteInterface } from '../../../shared/interfaces/docente.interface';
+import { DocenteInterface} from '../../../shared/interfaces/docente.interface';
 import { map, Observable } from 'rxjs';
-import { environment } from '../../../shared/environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocenteService {
  
-  url = `${environment.apiUrl}/usuarios`;
+  private url = '/api/docentes';
 
   constructor(private httpClient: HttpClient) {}
 
- 
+  
   getDocentes(): Observable<DocenteInterface[]> {
-    return this.httpClient
-      .get<DocenteInterface[]>(this.url)
-      .pipe(
-        map((docentes) =>
-          docentes.filter((docente) => docente.perfil === 'docente')
-        )
-      );
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  
+    return this.httpClient.get<DocenteInterface[]>(`${this.url}/buscar`, { headers });
   }
 
+  //metodo para saber o id de docente do usuario logado 
+  // pelo seu id de usuario
+  getIdDocentePeloIdUser(userId: string): Observable<string | null> {
+    return this.getDocentes().pipe(
+      map(docentes => {
+        const docente = docentes.find(d => d.usuario.id === userId);
+        return docente ? docente.id : null;
+      })  
+    );
+  }   
+
+  
+// metodos antigos, a serem atualizados:
   getDocenteById(id: string) {
     return this.httpClient.get<DocenteInterface>(this.url + `/${id}`);
   }

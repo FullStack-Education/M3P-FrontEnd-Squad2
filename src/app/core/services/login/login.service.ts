@@ -8,6 +8,7 @@ import {
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { UsuarioInterface } from '../../../shared/interfaces/usuario.interface';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -46,7 +47,7 @@ export class LoginService {
 
             const userId = decodedToken.userId;
 
-            sessionStorage.setItem('userId', userId);
+            sessionStorage.setItem('userId', userId.toString());
             sessionStorage.setItem('perfil', nome);
 
             this.router.navigate(['/inicio']);
@@ -79,6 +80,8 @@ export class LoginService {
   }
 
   
+
+  // metodos antigos, mudar depois
   getUsuarioLogadoByEmail(email: string) {
     return this.httpClient
       .get<Array<UsuarioInterface>>(this.url, {
@@ -93,6 +96,8 @@ export class LoginService {
   
 
   getIdUsuarioLogado(): string | null {
+
+
     return sessionStorage.getItem('id');
   }
 
