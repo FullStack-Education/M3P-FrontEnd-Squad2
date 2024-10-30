@@ -78,6 +78,7 @@ export class LoginService {
     return this.httpClient.get<UsuarioInterface>(this.url + `/${id}`);
   }
 
+  
   getUsuarioLogadoByEmail(email: string) {
     return this.httpClient
       .get<Array<UsuarioInterface>>(this.url, {
@@ -89,6 +90,7 @@ export class LoginService {
         map((usuarios) => usuarios.find((usuario) => usuario.email === email))
       );
   }
+  
 
   getIdUsuarioLogado(): string | null {
     return sessionStorage.getItem('id');

@@ -57,7 +57,7 @@ export class NotasAlunoComponent implements OnInit {
       if (retorno) {
         this.informacaoAluno = {
           nome: retorno.nome,
-          email: retorno.email,
+          email: retorno.usuario.email,
           genero: retorno.genero,
           telefone: retorno.telefone,
           cpf: retorno.cpf,
