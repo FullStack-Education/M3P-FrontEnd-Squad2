@@ -13,7 +13,7 @@ export class DocenteService {
 
   constructor(private httpClient: HttpClient) {}
 
-  
+  // novo metodo de busca por docentes usando a API spring
   getDocentes(): Observable<DocenteInterface[]> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -32,7 +32,16 @@ export class DocenteService {
         return docente ? docente.id : null;
       })  
     );
-  }   
+  } 
+  
+  getNomePeloUserId(userId: string): Observable<string | null> {
+    return this.getDocentes().pipe(
+      map(docentes => {
+        const docente = docentes.find(docente => docente.usuario.id.toString() === userId.toString());
+        return docente ? docente.nome : null;
+      })
+    );
+  }
 
   
 // metodos antigos, a serem atualizados:

@@ -61,7 +61,17 @@ export class AlunoService {
     return this.httpClient.delete<void>(`${this.url}/deletar/${id}`, { headers });
   }
 
+  // metodo para buscar o nome do aluno logado pelo seu userId
 
+
+  getNomePeloUserId(userId: string): Observable<string | null> {
+    return this.getAlunos().pipe(
+      map(alunos => {
+        const aluno = alunos.find(aluno => aluno.usuario.id.toString() === userId.toString());
+        return aluno ? aluno.nome : null;
+      })
+    );
+  }
   
 
 // metodos abaixo quando usava json server, atualizar quando necessário
