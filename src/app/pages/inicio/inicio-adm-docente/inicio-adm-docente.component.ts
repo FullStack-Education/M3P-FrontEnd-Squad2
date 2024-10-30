@@ -59,8 +59,10 @@ export class InicioAdmDocenteComponent implements OnInit {
 
   ngOnInit(): void {
     this.perfilUsuario = sessionStorage.getItem('perfil');
+    if(this.perfilUsuario === "administrador"){
+      this.buscarDadosDashboard();
+    }
     this.buscarDadosAlunos();
-    this.buscarDadosDashboard();
   }
 
   buscarDadosAlunos() {
