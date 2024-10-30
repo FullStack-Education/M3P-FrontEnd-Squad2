@@ -6,20 +6,21 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { UsuarioInterface } from '../../../shared/interfaces/usuario.interface';
 import { DocenteService } from '../docente/docente.service';
 import { AlunoService } from '../aluno/aluno.service';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-
-
   private url = '/api/login';
 
-  constructor(private httpClient: HttpClient, private router: Router, private docenteService: DocenteService, private alunoService: AlunoService) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    private docenteService: DocenteService,
+    private alunoService: AlunoService
+  ) {}
 
   login(dadosLogin: {
     email: string;
@@ -35,7 +36,6 @@ export class LoginService {
       })
       .pipe(
         map((response) => {
-       
           const token = response.token;
           if (token) {
             sessionStorage.setItem('token', token);
@@ -53,7 +53,6 @@ export class LoginService {
             sessionStorage.setItem('perfil', nome);
 
             this.router.navigate(['/inicio']);
-            
           }
           return response;
         }),
@@ -63,7 +62,6 @@ export class LoginService {
         })
       );
   }
-
 
   logout() {
     sessionStorage.removeItem('token');
@@ -77,7 +75,6 @@ export class LoginService {
     return JSON.parse(atob(payload));
   }
 
-
   getIdUsuarioLogado(): string | null {
     return sessionStorage.getItem('userId');
   }
@@ -86,40 +83,12 @@ export class LoginService {
     return sessionStorage.getItem('perfil');
   }
 
-
   // metodo usado no toolbar para buscar o nome do usuario logado
-  /*
-  getNomeUsuarioLogadoPeloUserId(userId: string): Observable<string | null>{
-    if(this.getPerfilUsuarioLogado() === "aluno"){
-      return this.alunoService.getAlunos().pipe(
-        map(alunos => {
-          const aluno = alunos.find(aluno => aluno.usuario.id.toString() === userId.toString());
-          return aluno? aluno.nome : null;
-        })
-      )
+  getNomeUsuarioLogadoPeloUserId(userId: string): Observable<string | null> {
+    if (this.getPerfilUsuarioLogado() === 'aluno') {
+      return this.alunoService.getNomePeloUserId(userId);
     } else {
-      return this.docenteService.getDocentes().pipe(
-        map(docentes => {
-          const docente = docentes.find(docente => docente.usuario.id.toString() === userId.toString());
-          return docente? docente.nome : null;
-        })
-      )
+      return this.docenteService.getNomePeloUserId(userId);
     }
   }
-
-*/
-
-getNomeUsuarioLogadoPeloUserId(userId: string): Observable<string | null> {
-  if (this.getPerfilUsuarioLogado() === "aluno") {
-    return this.alunoService.getNomePeloUserId(userId);
-  } else {
-    return this.docenteService.getNomePeloUserId(userId);
-  }
-}
-
-
-
-
-
-
 }
