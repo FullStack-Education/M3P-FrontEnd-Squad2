@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { TurmaService } from '../../../core/services/turma/turma.service';
 import { AlunoService } from '../../../core/services/aluno/aluno.service';
 import { FormsModule } from '@angular/forms';
-import { DocenteService } from '../../../core/services/docente/docente.service';
 import { IdadePipe } from '../../../core/pipes/idade/idade.pipe';
 import { TelefonePipe } from '../../../core/pipes/telefone/telefone.pipe';
+import { DashboardService } from '../../../core/services/dashboard/dashboard.service';
+
 
 @Component({
   selector: 'app-inicio-adm-docente',
@@ -39,31 +39,28 @@ export class InicioAdmDocenteComponent implements OnInit {
 
   dadosEstatisticos = [
     {
-      quantidade: '0',
+      quantidade: 0,
       entidade: 'Alunos',
     },
     {
-      quantidade: '0',
+      quantidade: 0,
       entidade: 'Docentes',
     },
     {
-      quantidade: '0',
+      quantidade: 0,
       entidade: 'Turmas',
     },
   ];
 
   constructor(
-    private turmaService: TurmaService,
     private alunoService: AlunoService,
-    private docenteService: DocenteService
+    private dashboardService: DashboardService
   ) {}
 
   ngOnInit(): void {
-    this.perfilUsuario = sessionStorage.getItem('userId');
-    this.buscarQuantidadeAlunos();
-    this.buscarQuantidadeDocentes();
-    this.buscarQuantidadeTurmas();
+    this.perfilUsuario = sessionStorage.getItem('perfil');
     this.buscarDadosAlunos();
+    this.buscarDadosDashboard();
   }
 
   buscarDadosAlunos() {
@@ -74,7 +71,7 @@ export class InicioAdmDocenteComponent implements OnInit {
             imagem: '/assets/imagem/icone-user-foto.png',
             nome: usuario.nome,
             idade: usuario.dataNascimento,
-            email: usuario.email,
+            email: usuario.usuario.email,
             telefone: usuario.telefone,
             acao:
               this.perfilUsuario === 'administrador'
@@ -88,23 +85,15 @@ export class InicioAdmDocenteComponent implements OnInit {
     this.listagemUsuariosPesquisa = this.listagemUsuarios;
   }
 
-  buscarQuantidadeAlunos() {
-    this.alunoService.getAlunos().subscribe((alunos) => {
-      this.dadosEstatisticos[0].quantidade = alunos.length.toString();
-    });
+  
+  buscarDadosDashboard(){
+    this.dashboardService.getDashboard().subscribe((retorno) => {
+      this.dadosEstatisticos[0].quantidade = retorno.totalAlunos;
+      this.dadosEstatisticos[1].quantidade = retorno.totalDocentes;
+      this.dadosEstatisticos[2].quantidade = retorno.totalTurmas;
+    })
   }
-
-  buscarQuantidadeDocentes() {
-    this.docenteService.getDocentes().subscribe((docentes) => {
-      this.dadosEstatisticos[1].quantidade = docentes.length.toString();
-    });
-  }
-
-  buscarQuantidadeTurmas() {
-    this.turmaService.getTurmas().subscribe((turmas) => {
-      this.dadosEstatisticos[2].quantidade = turmas.length.toString();
-    });
-  }
+  
 
   pesquisar() {
     if (this.textoPesquisa) {

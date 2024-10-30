@@ -10,9 +10,7 @@ import { environment } from '../../../shared/environments/environment';
 export class AlunoService {
 
   
-  url = `${environment.apiUrl}/usuarios`
-
-  private url2 = '/api/alunos';
+  private url = '/api/alunos';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -25,29 +23,48 @@ export class AlunoService {
     return this.httpClient.get<AlunoInterface[]>(`${this.url}/buscar`, { headers });
   }
 
-
-  getAlunos1(): Observable<AlunoInterface[]> {
-    return this.httpClient.get<AlunoInterface[]>(this.url).pipe(
-      map(aluno => aluno.filter(aluno => aluno.perfil === 'aluno'))
-    );
-  }
-
-  getAlunoById(id: string){
-    return this.httpClient.get<AlunoInterface>(this.url + `/${id}`);
-  }
-
-  postAluno(usuario : AlunoInterface){
-    return this.httpClient.post<any>(this.url, usuario);
-  }
+  getAlunoById(id: string): Observable<AlunoInterface> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
   
-  putAluno(usuario : AlunoInterface){
-    return this.httpClient.put<any>(this.url + `/${usuario.id}`, usuario);
-  }
-  
-  deleteAluno(id: string){
-    return this.httpClient.delete<any>(this.url + `/${id}`);
+    return this.httpClient.get<AlunoInterface>(`${this.url}/buscar/${id}`, { headers });
   }
 
+  postAluno(aluno: AlunoInterface): Observable<AlunoInterface> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.httpClient.post<AlunoInterface>(`${this.url}/criar`, aluno, { headers });
+  }
+
+  putAluno(id: string, aluno: AlunoInterface): Observable<AlunoInterface> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.httpClient.put<AlunoInterface>(`${this.url}/atualizar/${id}`, aluno, { headers });
+  }
+
+  deleteAluno(id: string): Observable<void> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.delete<void>(`${this.url}/deletar/${id}`, { headers });
+  }
+
+
+  
+
+// metodos abaixo quando usava json server, atualizar quando necessário
   getDocentesIdsDoAluno(idAluno: string){
     return this.httpClient.get<AlunoInterface>(`${this.url}/${idAluno}`).pipe(
       map(aluno => aluno.turma.map(turma => turma.docente))

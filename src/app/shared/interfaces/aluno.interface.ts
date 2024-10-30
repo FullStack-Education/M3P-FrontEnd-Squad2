@@ -1,11 +1,10 @@
 import { TurmaInterface } from "./turma.interface";
+import { UsuarioLogadoInterface } from "./usuarioLogado.interface";
 
 export interface AlunoInterface {
   id: string;
   nome: string;
   perfil: string
-  email: string;
-  senha: string;
   telefone: string;
   genero: string;
   turma: TurmaInterface[];
@@ -21,6 +20,7 @@ export interface AlunoInterface {
   localidade: string;
   uf: string;
   referencia: string;
+  usuario: UsuarioLogadoInterface;
 }
 
 export interface InformacaoAluno {

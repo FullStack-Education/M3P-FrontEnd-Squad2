@@ -121,7 +121,7 @@ export class CadastroAlunoComponent implements OnInit {
       );
 
       if (this.id) {
-        this.editar(this.cadastroForm.value);
+        //this.editar(this.cadastroForm.value);
       } else {
         this.cadastrar(this.cadastroForm.value);
       }
@@ -139,6 +139,7 @@ export class CadastroAlunoComponent implements OnInit {
       });
   }
 
+  /*
   editar(usuario: AlunoInterface) {
     usuario.id = this.id!;
     this.alunoService.putAluno(usuario).subscribe((retorno) => {
@@ -146,7 +147,7 @@ export class CadastroAlunoComponent implements OnInit {
       this.router.navigate(['/inicio']);
     });
   }
-
+*/
   verificarAlunoEmNota(alunoId: string) {
     this.notaService.verificarAlunoEmNotas(alunoId).subscribe((retorno) => {
       this.alunoVinculadoNota = retorno;
