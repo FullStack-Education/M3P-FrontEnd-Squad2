@@ -17,7 +17,7 @@ export class MenuLateralComponent implements OnInit {
   constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
-    this.perfilUsuario = sessionStorage.getItem('user');
+    this.perfilUsuario = this.loginService.getPerfilUsuarioLogado();
   }
 
   menuexpandir() {

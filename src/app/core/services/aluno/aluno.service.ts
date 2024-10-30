@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { AlunoInterface } from '../../../shared/interfaces/aluno.interface';
+import { AlunoInterface, AlunoInterfaceRequest, AlunoInterfaceResponse } from '../../../shared/interfaces/aluno.interface';
 
 
 @Injectable({
@@ -14,42 +14,42 @@ export class AlunoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAlunos(): Observable<AlunoInterface[]> {
+  getAlunos(): Observable<AlunoInterfaceResponse[]> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
   
-    return this.httpClient.get<AlunoInterface[]>(`${this.url}/buscar`, { headers });
+    return this.httpClient.get<AlunoInterfaceResponse[]>(`${this.url}/buscar`, { headers });
   }
 
-  getAlunoById(id: string): Observable<AlunoInterface> {
+  getAlunoById(id: string): Observable<AlunoInterfaceResponse> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
   
-    return this.httpClient.get<AlunoInterface>(`${this.url}/buscar/${id}`, { headers });
+    return this.httpClient.get<AlunoInterfaceResponse>(`${this.url}/buscar/${id}`, { headers });
   }
 
-  postAluno(aluno: AlunoInterface): Observable<AlunoInterface> {
+  postAluno(aluno: AlunoInterfaceRequest): Observable<AlunoInterfaceResponse> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
-    return this.httpClient.post<AlunoInterface>(`${this.url}/criar`, aluno, { headers });
+    return this.httpClient.post<AlunoInterfaceResponse>(`${this.url}/criar`, aluno, { headers });
   }
 
-  putAluno(id: string, aluno: AlunoInterface): Observable<AlunoInterface> {
+  putAluno(id: string, aluno: AlunoInterfaceRequest): Observable<AlunoInterfaceResponse> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
-    return this.httpClient.put<AlunoInterface>(`${this.url}/atualizar/${id}`, aluno, { headers });
+    return this.httpClient.put<AlunoInterfaceResponse>(`${this.url}/atualizar/${id}`, aluno, { headers });
   }
 
   deleteAluno(id: string): Observable<void> {
@@ -61,10 +61,17 @@ export class AlunoService {
     return this.httpClient.delete<void>(`${this.url}/deletar/${id}`, { headers });
   }
 
-
+  getNomePeloUserId(userId: string): Observable<string | null> {
+    return this.getAlunos().pipe(
+      map(alunos => {
+        const aluno = alunos.find(aluno => aluno.usuario.id.toString() === userId.toString());
+        return aluno ? aluno.nome : null;
+      })
+    );
+  }
   
 
-// metodos abaixo quando usava json server, atualizar quando necessário
+// metodos antigos a serem atualizados quando necessário
   getDocentesIdsDoAluno(idAluno: string){
     return this.httpClient.get<AlunoInterface>(`${this.url}/${idAluno}`).pipe(
       map(aluno => aluno.turma.map(turma => turma.docente))

@@ -15,6 +15,7 @@ import { LoginService } from './core/services/login/login.service';
 export class AppComponent implements OnInit {
   title = 'labpcp-angular';
 
+
   mostrarContainer = true;
   toolbarDados = {
     titulo: '',
@@ -36,13 +37,13 @@ export class AppComponent implements OnInit {
   
   private buscaNomeUsuario() {
     const idUsuario = this.loginService.getIdUsuarioLogado();
-
     if (idUsuario) {
-      this.loginService.getNomeUsuarioLogado(idUsuario).subscribe((nome) => {
-        this.toolbarDados.nomeUsuario = nome;
+      this.loginService.getNomeUsuarioLogadoPeloUserId(idUsuario).subscribe((nome) => {
+        this.toolbarDados.nomeUsuario = nome ?? 'Usuário';  
       });
     }
   }
+  
 
   private toolbarTitulo(url: string) {
     if (url.includes('cadastro-docente')) {
