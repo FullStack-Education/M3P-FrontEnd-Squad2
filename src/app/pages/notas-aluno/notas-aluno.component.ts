@@ -76,7 +76,7 @@ export class NotasAlunoComponent implements OnInit {
 
   buscarNomesDocentes() {
     this.informacaoTurma.forEach((turma, index) => {
-      this.docenteService.getNomeDocente(turma.docente).subscribe((nome) => {
+      this.docenteService.getNomeDocenteById(turma.docente).subscribe((nome) => {
         this.informacaoTurma[index].docente = nome;
       });
     });

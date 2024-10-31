@@ -1,5 +1,5 @@
 import { MateriaInterface } from './materia.interface';
-import { UsuarioInterface, UsuarioInterfaceRequest, UsuarioInterfaceResponse } from './usuarios.interface';
+import { UsuarioInterface, UsuarioInterfaceResponse } from './usuarios.interface';
 
 
 
@@ -24,7 +24,7 @@ export interface DocenteInterface {
   materias: MateriaInterface[]; 
 }
 
-export interface DocenteInterfaceRequest {
+export interface DocenteRequestInterface {
   nome: string;
   telefone: string;
   genero: string;
@@ -34,17 +34,18 @@ export interface DocenteInterfaceRequest {
   rg: string;
   naturalidade: string;
   cep: string;
-  logradouro: string;
-  numero: string;
-  complemento: string;
-  bairro: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
   uf: string;
-  referencia: string;
-  usuario: UsuarioInterfaceRequest; 
-  materias: MateriaInterface[]; 
+  referencia?: string;
+  materiasIds: Number[]; 
+  email?: string;
+  senha?: string;
 }
 
-export interface DocenteInterfaceResponse {
+export interface DocenteResponseInterface {
   id: string; 
   nome: string;
   telefone: string;

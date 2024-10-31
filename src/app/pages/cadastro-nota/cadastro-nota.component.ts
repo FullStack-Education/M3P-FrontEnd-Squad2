@@ -102,7 +102,7 @@ export class CadastroNotaComponent implements OnInit {
     this.materiaService.getMaterias().subscribe((materias) => {
       this.listagemMaterias = materias.map((materia) => ({
         id: materia.id,
-        nome: materia.nomeMateria,
+        nome: materia.nome,
       }));
     });
   }

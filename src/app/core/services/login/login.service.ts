@@ -88,7 +88,7 @@ export class LoginService {
     if (this.getPerfilUsuarioLogado() === 'aluno') {
       return this.alunoService.getNomePeloUserId(userId);
     } else {
-      return this.docenteService.getNomePeloUserId(userId);
+      return this.docenteService.getDocenteNomeByUserId(userId);
     }
   }
 }
