@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DocenteInterface, DocenteInterfaceResponse} from '../../../shared/interfaces/docente.interface';
+import { DocenteInterface, DocenteRequestInterface, DocenteResponseInterface} from '../../../shared/interfaces/docente.interface';
 import { map, Observable } from 'rxjs';
+import { MateriaInterface } from '../../../shared/interfaces/materia.interface';
 
 
 @Injectable({
@@ -13,19 +14,16 @@ export class DocenteService {
 
   constructor(private httpClient: HttpClient) {}
 
-  // novo metodo de busca por docentes usando a API spring
-  getDocentes(): Observable<DocenteInterfaceResponse[]> {
+  getDocentes(): Observable<DocenteResponseInterface[]> {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
     });
   
-    return this.httpClient.get<DocenteInterfaceResponse[]>(`${this.url}/buscar`, { headers });
+    return this.httpClient.get<DocenteResponseInterface[]>(`${this.url}/buscar`, { headers });
   }
 
-  //metodo para saber o id de docente do usuario logado 
-  // pelo seu id de usuario
-  getIdDocentePeloIdUser(userId: string): Observable<string | null> {
+  getDocenteByUserId(userId: string): Observable<string | null> {
     return this.getDocentes().pipe(
       map(docentes => {
         const docente = docentes.find(d => d.usuario.id.toString() === userId.toString());
@@ -34,7 +32,7 @@ export class DocenteService {
     );
   } 
   
-  getNomePeloUserId(userId: string): Observable<string | null> {
+  getDocenteNomeByUserId(userId: string): Observable<string | null> {
     return this.getDocentes().pipe(
       map(docentes => {
         const docente = docentes.find(docente => docente.usuario.id.toString() === userId.toString());
@@ -43,32 +41,54 @@ export class DocenteService {
     );
   }
 
-  
-// metodos antigos, a serem atualizados:
-  getDocenteById(id: string) {
-    return this.httpClient.get<DocenteInterface>(this.url + `/${id}`);
+  getDocenteById(id: string): Observable<DocenteResponseInterface> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.get<DocenteResponseInterface>(`${this.url}/buscar/${id}`, { headers });
   }
 
-  postDocente(usuario: DocenteInterface) {
-    return this.httpClient.post<any>(this.url, usuario);
+  postDocente(usuario: DocenteRequestInterface) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.post<DocenteResponseInterface>(`${this.url}/criar`, usuario, { headers });
   }
 
-  putDocente(usuario: DocenteInterface) {
-    return this.httpClient.put<any>(this.url + `/${usuario.id}`, usuario);
+  putDocente(usuario: DocenteRequestInterface, id: string) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.put<any>(`${this.url}/atualizar/${id}`, usuario, { headers });
   }
 
   deleteDocente(id: string) {
-    return this.httpClient.delete<any>(this.url + `/${id}`);
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.httpClient.delete<any>(`${this.url}/deletar/${id}`, { headers });
   }
 
-  getMateriasDocente(id: string) {
-    return this.httpClient
-      .get<DocenteInterface>(`${this.url}/${id}`)
-      .pipe(map((docente) => docente.materias));
+  getMateriasByDocenteId(id: string) : Observable<MateriaInterface[]> {
+
+    return this.getDocenteById(id)
+      .pipe(
+        map((docente) => docente.materias)
+      );
   }
 
-  getNomeDocente(id: string){
-    return this.getDocenteById(id).pipe(
+  getNomeDocenteById(id: string){
+
+    return this.getDocenteById(id)
+    .pipe(
       map(usuario => usuario.nome) 
     );
   }

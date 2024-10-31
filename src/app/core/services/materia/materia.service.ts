@@ -1,23 +1,32 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MateriaInterface } from '../../../shared/interfaces/materia.interface';
-import { environment } from '../../../shared/environments/environment';
+import { MateriaInterface, MateriaResponseInterface } from '../../../shared/interfaces/materia.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MateriaService {
 
-  url = `${environment.apiUrl}/materias`
+  private url = '/api/materias';
   
 
   constructor(private httpClient: HttpClient) { }
 
   getMaterias(){
-    return this.httpClient.get<Array<MateriaInterface>>(this.url); 
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.get<Array<MateriaResponseInterface>>(`${this.url}/buscar`, { headers }); 
   }
 
   getMateriaById(id: string){
-    return this.httpClient.get<MateriaInterface>(this.url + `/${id}`);
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.get<MateriaResponseInterface>(`${this.url}/buscar/${id}`, { headers });
   }
 }

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { InicioComponent } from './pages/inicio/inicio/inicio.component';
-import { CadastroDocenteComponent } from './pages/cadastroDocente/cadastro-docente/cadastro-docente.component';
+import { CadastroDocenteComponent } from './pages/cadastro-docente/cadastro-docente.component';
 import { CadastroTurmaComponent } from './pages/cadastro-turma/cadastro-turma.component';
 import { CadastroAlunoComponent } from './pages/cadastro-aluno/cadastro-aluno.component';
 import { CadastroNotaComponent } from './pages/cadastro-nota/cadastro-nota.component';

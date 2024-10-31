@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NotaInterface } from '../../../shared/interfaces/nota.interface';
 import { map } from 'rxjs';
@@ -8,7 +8,8 @@ import { environment } from '../../../shared/environments/environment';
   providedIn: 'root',
 })
 export class NotaService {
-  url = `${environment.apiUrl}/notas`;
+
+  private url = '/api/notas';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -25,8 +26,13 @@ export class NotaService {
   }
 
   verificarDocenteEmNotas(docenteId: string) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
     return this.httpClient
-      .get<Array<NotaInterface>>(this.url)
+      .get<Array<NotaInterface>>(`${this.url}/buscar`, { headers })
       .pipe(map((notas) => notas.some((nota) => nota.docente === docenteId)));
   }
 
