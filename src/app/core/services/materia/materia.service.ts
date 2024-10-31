@@ -22,6 +22,11 @@ export class MateriaService {
   }
 
   getMateriaById(id: string){
-    return this.httpClient.get<MateriaInterface>(this.url + `/${id}`);
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.get<MateriaResponseInterface>(`${this.url}/buscar/${id}`, { headers });
   }
 }

@@ -6,22 +6,22 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DocenteInterface, DocenteRequestInterface } from '../../../shared/interfaces/docente.interface';
-import { DocenteService } from '../../../core/services/docente/docente.service';
+import { DocenteInterface, DocenteRequestInterface } from '../../shared/interfaces/docente.interface';
+import { DocenteService } from '../../core/services/docente/docente.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MateriaService } from '../../../core/services/materia/materia.service';
-import { MateriaInterface } from '../../../shared/interfaces/materia.interface';
+import { MateriaService } from '../../core/services/materia/materia.service';
+import { MateriaInterface } from '../../shared/interfaces/materia.interface';
 import {
   NgSelectComponent,
   NgLabelTemplateDirective,
   NgOptionTemplateDirective,
 } from '@ng-select/ng-select';
-import { ConsultaCepService } from '../../../core/services/busca-cep/consulta-cep.service';
-import { LabelErroDirective } from '../../../core/directives/label-erro/label-erro.directive';
-import { dataNascimentoValidator } from '../../../core/validators/dataNascimento/data-nascimento.validator';
+import { ConsultaCepService } from '../../core/services/busca-cep/consulta-cep.service';
+import { LabelErroDirective } from '../../core/directives/label-erro/label-erro.directive';
+import { dataNascimentoValidator } from '../../core/validators/dataNascimento/data-nascimento.validator';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
-import { NotaService } from '../../../core/services/nota/nota.service';
-import { TurmaService } from '../../../core/services/turma/turma.service';
+import { NotaService } from '../../core/services/nota/nota.service';
+import { TurmaService } from '../../core/services/turma/turma.service';
 
 @Component({
   selector: 'app-cadastro-docente',

@@ -6,4 +6,5 @@ export interface MateriaInterface {
 export interface MateriaResponseInterface {
   id: string;
   nome: string;
+  curso_id: number;
 }
