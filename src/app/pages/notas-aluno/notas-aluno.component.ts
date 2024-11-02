@@ -62,13 +62,14 @@ export class NotasAlunoComponent implements OnInit {
           telefone: retorno.telefone,
           cpf: retorno.cpf,
         };
+/* apagado para nao mostrar erro, voltar depois
 
         this.informacaoTurma = retorno.turma.map((turma) => ({
           docente: turma.docente,
           nomeTurma: turma.nomeTurma,
           horario: turma.horario,
         }));
-
+*/
         this.buscarNomesDocentes();
       }
     });
