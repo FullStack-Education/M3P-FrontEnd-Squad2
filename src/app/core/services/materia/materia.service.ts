@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  MateriaInterface,
   MateriaResponseInterface,
 } from '../../../shared/interfaces/materia.interface';
 import { map, Observable } from 'rxjs';

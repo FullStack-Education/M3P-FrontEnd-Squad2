@@ -6,7 +6,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DocenteInterface, DocenteRequestInterface } from '../../shared/interfaces/docente.interface';
+import {
+  DocenteInterface,
+  DocenteRequestInterface,
+} from '../../shared/interfaces/docente.interface';
 import { DocenteService } from '../../core/services/docente/docente.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MateriaService } from '../../core/services/materia/materia.service';
@@ -105,13 +108,13 @@ export class CadastroDocenteComponent implements OnInit {
         Validators.maxLength(64),
       ]),
       materiasIds: new FormControl([], Validators.required),
-      cep: new FormControl(''),
+      cep: new FormControl('', Validators.required),
       logradouro: new FormControl(''),
       numero: new FormControl(''),
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       localidade: new FormControl(''),
-      uf: new FormControl(''),
+      uf: new FormControl('', Validators.required),
       referencia: new FormControl(''),
     });
   }
@@ -119,34 +122,42 @@ export class CadastroDocenteComponent implements OnInit {
   onSubmit() {
     if (this.cadastroForm.valid) {
       const formValue = this.cadastroForm.value;
-      formValue.materiasIds = this.listagemMaterias.filter((materia) =>
-        formValue.materiasIds.includes(materia.id)
-      );
+      formValue.turma = formValue.turma;
 
       if (this.id) {
         this.editar(this.cadastroForm.value);
       } else {
-        this.cadastrar(this.cadastroForm.value);
+        this.cadastrar(formValue);
       }
     } else {
       alert('Preencha todos os campos marcados com um *');
     }
   }
 
-  cadastrar(usuario: DocenteInterface) {
-    this.docenteService
-      .postDocente(this.cadastroForm.value)
-      .subscribe((retorno) => {
+  cadastrar(usuario: DocenteRequestInterface) {
+    this.docenteService.postDocente(usuario).subscribe(
+      (retorno) => {
         window.alert('Docente cadastrado com sucesso!');
         this.router.navigate(['/listagem-docentes']);
-      });
+      },
+      (error) => {
+        window.alert(
+          'Erro ao cadastrar docente: email já cadastrado'
+        );
+      }
+    );
   }
 
   editar(usuario: DocenteRequestInterface) {
-    this.docenteService.putDocente(usuario, this.id!).subscribe((retorno) => {
-      window.alert('Docente editado com sucesso!');
-      this.router.navigate(['/listagem-docentes']);
-    });
+    this.docenteService.putDocente(usuario, this.id!).subscribe(
+      (retorno) => {
+        window.alert('Docente editado com sucesso!');
+        this.router.navigate(['/listagem-docentes']);
+      },
+      (error) => {
+        window.alert('Erro ao editar docente: email já cadastrado ');
+      }
+    );
   }
 
   verificarDocenteEmTurma(docenteId: string) {
@@ -170,10 +181,17 @@ export class CadastroDocenteComponent implements OnInit {
           'Docente não pode ser excluído por estar vínculado a turma e/ou avaliações'
         );
       } else {
-        this.docenteService.deleteDocente(this.id).subscribe(() => {
-          window.alert('Docente excluído com sucesso!');
-          this.router.navigate(['/listagem-docentes']);
-        });
+        this.docenteService.deleteDocente(this.id).subscribe(
+          () => {
+            window.alert('Docente excluído com sucesso!');
+            this.router.navigate(['/listagem-docentes']);
+          },
+          (error) => {
+            window.alert(
+              'Erro ao excluir docente: não pode estar vinculado a turma e/ou avaliações '
+            );
+          }
+        );
       }
     }
   }
