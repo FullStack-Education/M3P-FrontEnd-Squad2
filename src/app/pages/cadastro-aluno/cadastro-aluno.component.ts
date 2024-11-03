@@ -59,10 +59,11 @@ export class CadastroAlunoComponent implements OnInit {
         if (retorno) {
           this.cadastroForm.patchValue({
             ...retorno,
-            turma: retorno.turma.map((turma) => turma.id),
+          //  turma: retorno.turma.map((turma) => turma.id),
+          // apagado por enquando pois estava dando erro, depois voltar
           });
         }
-      });
+      }); 
 
       this.verificarAlunoEmNota(this.id);
       this. verificarAlunoEmTurmas(this.id);

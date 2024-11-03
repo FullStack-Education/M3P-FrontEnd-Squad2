@@ -7,3 +7,14 @@ export interface NotaInterface {
   dataAvaliacao: string;
   valorNota: number;
 }
+
+
+export interface NotaInterfaceResponse {
+  id: number;
+  nome: string;
+  valor: number;
+  dataAvaliacao: string;
+  alunoId: number;
+  docenteId: number;
+  materiaId: number;
+}
