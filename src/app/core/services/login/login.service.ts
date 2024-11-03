@@ -9,7 +9,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { DocenteService } from '../docente/docente.service';
 import { AlunoService } from '../aluno/aluno.service';
 
-@Injectable({
+@Injectable({ 
   providedIn: 'root',
 })
 export class LoginService {
