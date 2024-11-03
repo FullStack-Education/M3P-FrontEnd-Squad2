@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { InformacaoAluno } from '../../shared/interfaces/aluno.interface';
 import { InformacaoTurma } from '../../shared/interfaces/turma.interface';
 import { AlunoService } from '../../core/services/aluno/aluno.service';
-import { NotaService } from '../../core/services/nota/nota.service';
 import { CommonModule } from '@angular/common';
 import { DocenteService } from '../../core/services/docente/docente.service';
 import { TelefonePipe } from '../../core/pipes/telefone/telefone.pipe';
-import { LoginService } from '../../core/services/login/login.service';
+import { MateriaService } from '../../core/services/materia/materia.service';
 
 @Component({
   selector: 'app-notas-aluno',
@@ -18,6 +17,8 @@ import { LoginService } from '../../core/services/login/login.service';
 export class NotasAlunoComponent implements OnInit {
   idAluno!: string | null;
 
+  id: string | null = null;
+
   informacaoAluno: InformacaoAluno = {
     nome: '',
     email: '',
@@ -26,7 +27,11 @@ export class NotasAlunoComponent implements OnInit {
     cpf: '',
   };
 
-  informacaoTurma: Array<InformacaoTurma> = [];
+  informacaoTurma: InformacaoTurma = {
+    docente: '',
+    nomeTurma: '',
+    horario: '',
+  };
 
   listagemNota: Array<{
     id: string;
@@ -37,23 +42,24 @@ export class NotasAlunoComponent implements OnInit {
   }> = [];
 
   constructor(
-    private loginService: LoginService,
     private alunoService: AlunoService,
-    private notaService: NotaService,
-    private docenteService: DocenteService
+    private docenteService: DocenteService,
+    private materiaService: MateriaService
   ) {}
 
   ngOnInit(): void {
-    this.idAluno = this.loginService.getIdUsuarioLogado();
-
-    if (this.idAluno) {
-      this.buscarAluno(this.idAluno);
-      this.buscarNotas(this.idAluno);
+    this.id = sessionStorage.getItem('userId');
+    if (this.id) {
+      this.alunoService.getIdAlunoByUserId(this.id).subscribe((idAluno) => {
+        this.idAluno = idAluno || '';
+        this.buscarInformacoesAluno(this.idAluno);
+        this.buscarDadosAvaliacoes(this.idAluno);
+      });
     }
   }
 
-  buscarAluno(id: string) {
-    this.alunoService.getAlunoById(id).subscribe((retorno) => {
+  buscarInformacoesAluno(idAluno: string) {
+    this.alunoService.getAlunoById(idAluno).subscribe((retorno) => {
       if (retorno) {
         this.informacaoAluno = {
           nome: retorno.nome,
@@ -62,39 +68,41 @@ export class NotasAlunoComponent implements OnInit {
           telefone: retorno.telefone,
           cpf: retorno.cpf,
         };
-/* apagado para nao mostrar erro, voltar depois
-
-        this.informacaoTurma = retorno.turma.map((turma) => ({
-          docente: turma.docente,
-          nomeTurma: turma.nomeTurma,
-          horario: turma.horario,
-        }));
-*/
-        this.buscarNomesDocentes();
+        this.docenteService
+          .getNomeDocenteById(retorno.turma.docenteId.toString())
+          .subscribe((nomeDocente) => {
+            this.informacaoTurma = {
+              docente: nomeDocente || '',
+              nomeTurma: retorno.turma.nome,
+              horario: retorno.turma.horario,
+            };
+          });
       }
     });
   }
 
-  buscarNomesDocentes() {
-    this.informacaoTurma.forEach((turma, index) => {
-      this.docenteService.getNomeDocenteById(turma.docente).subscribe((nome) => {
-        this.informacaoTurma[index].docente = nome;
-      });
-    });
-  }
-
-  buscarNotas(idAluno: string) {
-    this.notaService.getNotasByIdAluno(idAluno).subscribe((retorno) => {
+  buscarDadosAvaliacoes(idAluno: string) {
+    this.alunoService.getNotasAluno(idAluno).subscribe((retorno) => {
+      this.listagemNota = []; 
       retorno.forEach((nota) => {
-        if (nota) {
-          this.listagemNota.push({
-            id: nota.id,
-            nomeAvaliacao: nota.nomeAvaliacao,
-            data: nota.dataAvaliacao,
-            nomeMateria: nota.nomeMateria,
-            valorNota: nota.valorNota,
+        this.materiaService
+          .getNomeMateriaById(nota.materiaId.toString())
+          .subscribe((nomeMateria) => {
+            this.listagemNota.push({
+              id: nota.id.toString(),
+              nomeAvaliacao: nota.nome,
+              nomeMateria: nomeMateria || 'Matéria não encontrada',
+              data: nota.dataAvaliacao,
+              valorNota: nota.valor,
+            });
+
+            if (this.listagemNota.length === retorno.length) {
+              this.listagemNota.sort(
+                (a, b) =>
+                  new Date(a.data).getTime() - new Date(b.data).getTime()
+              );
+            }
           });
-        }
       });
     });
   }
