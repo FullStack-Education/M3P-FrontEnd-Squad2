@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DocenteService } from '../../core/services/docente/docente.service';
 
+
 @Component({
   selector: 'app-listagem-docentes',
   standalone: true,
