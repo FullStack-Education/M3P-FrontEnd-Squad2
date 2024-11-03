@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NotaInterface } from '../../../shared/interfaces/nota.interface';
+import { NotaInterface, NotaInterfaceRequest, NotaInterfaceResponse } from '../../../shared/interfaces/nota.interface';
 import { map } from 'rxjs';
-import { environment } from '../../../shared/environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +21,16 @@ export class NotaService {
     });
   }
 
-  postNota(nota: NotaInterface) {
-    return this.httpClient.post<any>(this.url, nota);
+  postNota(nota: NotaInterfaceRequest) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.post<NotaInterfaceResponse>(`${this.url}/criar`, nota, { headers });
   }
+
+
 
   verificarDocenteEmNotas(docenteId: string) {
     const token = sessionStorage.getItem('token');

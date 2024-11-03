@@ -18,3 +18,12 @@ export interface NotaInterfaceResponse {
   docenteId: number;
   materiaId: number;
 }
+
+export interface NotaInterfaceRequest {
+  nome: string;
+  valor: number;
+  dataAvaliacao: string;
+  alunoId: number;
+  docenteId: number;
+  materiaId: number;
+}

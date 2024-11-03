@@ -23,6 +23,7 @@ export class DocenteService {
     return this.httpClient.get<DocenteResponseInterface[]>(`${this.url}/buscar`, { headers });
   }
 
+  /*
   getDocenteByUserId(userId: string): Observable<string | null> {
     return this.getDocentes().pipe(
       map(docentes => {
@@ -30,7 +31,17 @@ export class DocenteService {
         return docente ? docente.id : null;
       })  
     );
-  } 
+  } */
+
+    getDocenteByUserId(userId: string): Observable<DocenteResponseInterface | null> {
+      return this.getDocentes().pipe(
+        map(docentes => {
+          const docente = docentes.find(d => d.usuario.id.toString() === userId.toString());
+          return docente || null; 
+        })
+      );
+    }
+    
   
   getDocenteNomeByUserId(userId: string): Observable<string | null> {
     return this.getDocentes().pipe(
