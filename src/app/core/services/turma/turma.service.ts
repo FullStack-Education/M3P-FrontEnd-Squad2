@@ -1,8 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TurmaInterface } from '../../../shared/interfaces/turma.interface';
-import { map } from 'rxjs';
-import { environment } from '../../../shared/environments/environment';
+import {
+  TurmaInterface,
+  TurmaInterfaceRequest,
+  TurmaInterfaceResponse,
+  
+} from '../../../shared/interfaces/turma.interface';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +16,15 @@ export class TurmaService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getTurmas() {
-    return this.httpClient.get<Array<TurmaInterface>>(this.url);
+  getTurmas(): Observable<TurmaInterfaceResponse[]> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.httpClient.get<TurmaInterfaceResponse[]>(`${this.url}/buscar`, {
+      headers,
+    });
   }
 
   getTurmaById(id: string) {
@@ -27,7 +38,7 @@ export class TurmaService {
   verificarDocenteEmTurmas(docenteId: string) {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     return this.httpClient
@@ -36,4 +47,6 @@ export class TurmaService {
         map((turmas) => turmas.some((turma) => turma.docente === docenteId))
       );
   }
+
+  
 }
