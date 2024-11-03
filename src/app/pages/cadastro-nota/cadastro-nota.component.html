@@ -27,15 +27,13 @@
     </div>
 
     <div class="campo">
-      <label for="materia">Materia*</label>
-      <select id="materia" name="materia" formControlName="nomeMateria">
-        <option *ngFor="let materia of listagemMaterias" [value]="materia.nome">
+      <label for="materia">Matéria*</label>
+      <select id="materia" name="materia" formControlName="materiaId">
+        <option *ngFor="let materia of listagemMaterias" [value]="materia.id"> 
           {{ materia.nome }}
         </option>
       </select>
-      <span
-        *ngIf="(cadastroForm.controls['nomeMateria'].touched) &&cadastroForm.controls['nomeMateria'].errors?.['required']"
-        appLabelErro>Campo Obrigatório!</span>
+      <span *ngIf="(cadastroForm.controls['materiaId'].touched) && cadastroForm.controls['materiaId'].errors?.['required']" appLabelErro>Campo Obrigatório!</span>
     </div>
 
     <div class="campo">
