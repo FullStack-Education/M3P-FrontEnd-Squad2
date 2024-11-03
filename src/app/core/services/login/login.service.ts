@@ -83,7 +83,7 @@ export class LoginService {
     return sessionStorage.getItem('perfil');
   }
 
-  // metodo usado no toolbar para buscar o nome do usuario logado
+  
   getNomeUsuarioLogadoPeloUserId(userId: string): Observable<string | null> {
     if (this.getPerfilUsuarioLogado() === 'aluno') {
       return this.alunoService.getNomePeloUserId(userId);

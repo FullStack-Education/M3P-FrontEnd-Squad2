@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   TurmaInterface,
-  TurmaInterfaceRequest,
   TurmaInterfaceResponse,
   
 } from '../../../shared/interfaces/turma.interface';
