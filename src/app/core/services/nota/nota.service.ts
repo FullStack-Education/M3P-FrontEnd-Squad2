@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NotaInterface, NotaInterfaceRequest, NotaInterfaceResponse } from '../../../shared/interfaces/nota.interface';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -12,6 +12,17 @@ export class NotaService {
   private url = '/api/notas';
 
   constructor(private httpClient: HttpClient) {}
+
+  getNotas(): Observable<NotaInterfaceResponse[]> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.httpClient.get<NotaInterfaceResponse[]>(`${this.url}/buscar`, {
+      headers,
+    });
+  }
 
   getNotasByIdAluno(idAluno: string) {
     return this.httpClient.get<Array<NotaInterface>>(this.url, {
@@ -44,8 +55,9 @@ export class NotaService {
   }
 
   verificarAlunoEmNotas(alunoId: string) {
-    return this.httpClient
-      .get<Array<NotaInterface>>(this.url)
-      .pipe(map((notas) => notas.some((nota) => nota.aluno === alunoId)));
+    return this.getNotas().pipe(
+      map((notas) => notas.some((nota) => nota.alunoId.toString() === alunoId))
+    );
   }
+
 }

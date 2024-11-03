@@ -13,7 +13,8 @@ export interface InformacaoTurma{
   horario: string;
 }
 
-export interface TurmaInterfaceRespose{
+
+export interface TurmaInterfaceResponse {
   id: number;
   nome: string;
   dataInicio: string;
@@ -22,6 +23,7 @@ export interface TurmaInterfaceRespose{
   docenteId: number;
   cursoId: number;
 }
+
 
 export interface TurmaInterfaceRequest{
   nome: string;
