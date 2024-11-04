@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   TurmaInterface,
+  TurmaInterfaceRequest,
   TurmaInterfaceResponse,
   
 } from '../../../shared/interfaces/turma.interface';
@@ -27,11 +28,28 @@ export class TurmaService {
   }
 
   getTurmaById(id: string) {
-    return this.httpClient.get<TurmaInterface>(this.url + `/${id}`);
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.httpClient.get<TurmaInterfaceResponse>(
+      `${this.url}/buscar/${id}`,
+      { headers }
+    );
   }
 
-  postTurma(usuario: TurmaInterface) {
-    return this.httpClient.post<any>(this.url, usuario);
+  postTurma(usuario: TurmaInterfaceRequest) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.httpClient.post<TurmaInterfaceRequest>(
+      `${this.url}/criar`,
+      usuario,
+      { headers }
+    );
   }
 
   verificarDocenteEmTurmas(docenteId: string) {

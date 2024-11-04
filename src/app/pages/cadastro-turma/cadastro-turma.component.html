@@ -34,6 +34,17 @@
     </div>
 
     <div class="campo">
+      <label for="curso">Curso*</label>
+      <select  id="curso" name="curso" formControlName="curso">
+        <option *ngFor="let curso of listagemCursos" [value]="curso.id">
+          {{ curso.nome }}
+        </option>
+      </select>
+      <span *ngIf="(cadastroForm.controls['curso'].touched) &&cadastroForm.controls['curso'].errors?.['required']"
+      appLabelErro>Campo Obrigatório!</span>
+      </div>
+
+    <div class="campo">
       <label for="dataInicio">Data de início*</label>
       <input type="date" id="dataInicio" name="dataInicio" formControlName="dataInicio">
       <span
