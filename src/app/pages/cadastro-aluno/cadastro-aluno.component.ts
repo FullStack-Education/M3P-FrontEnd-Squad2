@@ -5,7 +5,7 @@ import { AlunoService } from '../../core/services/aluno/aluno.service';
 import { AlunoInterfaceRequest} from '../../shared/interfaces/aluno.interface';
 import { TurmaService } from '../../core/services/turma/turma.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TurmaInterfaceResponse } from '../../shared/interfaces/turma.interface';
+import { TurmaInterface, TurmaResponseInterface } from '../../shared/interfaces/turma.interface';
 import {
   NgSelectComponent,
   NgLabelTemplateDirective,
@@ -16,6 +16,8 @@ import { LabelErroDirective } from '../../core/directives/label-erro/label-erro.
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { dataNascimentoValidator } from '../../core/validators/dataNascimento/data-nascimento.validator';
 import { NotaService } from '../../core/services/nota/nota.service';
+import { DocenteService } from '../../core/services/docente/docente.service';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro-aluno',
@@ -36,7 +38,7 @@ import { NotaService } from '../../core/services/nota/nota.service';
 export class CadastroAlunoComponent implements OnInit {
   cadastroForm!: FormGroup;
   id!: string | null;
-  listagemTurmas: Array<{ id: string; nome: string }> = [];
+  listagemTurmas: TurmaResponseInterface[] = [];
   alunoVinculadoNota: boolean | null = null;
   
 
@@ -46,6 +48,7 @@ export class CadastroAlunoComponent implements OnInit {
     private notaService: NotaService,
     public activatedRoute: ActivatedRoute,
     private cepService: ConsultaCepService,
+    private docenteService: DocenteService,
     private router: Router
   ) {}
 
@@ -116,8 +119,7 @@ export class CadastroAlunoComponent implements OnInit {
   onSubmit() {
     if (this.cadastroForm.valid) {
       const formValue = this.cadastroForm.value;
-      formValue.turma = formValue.turma; 
-  
+
       if (this.id) {
         this.editar(this.cadastroForm.value);
       } else {
@@ -127,8 +129,6 @@ export class CadastroAlunoComponent implements OnInit {
       alert('Preencha todos os campos marcados com um *');
     }
   }
-  
-
 
   cadastrar(usuario: AlunoInterfaceRequest) {
     this.alunoService.postAluno(usuario).subscribe((retorno) => {
@@ -184,17 +184,29 @@ export class CadastroAlunoComponent implements OnInit {
     }
   }
 
-
-
   obterTurmas() {
-    this.turmaService.getTurmas().subscribe((turmas: TurmaInterfaceResponse[]) => {
-      this.listagemTurmas = turmas.map((turma: TurmaInterfaceResponse) => ({
-        id: turma.id.toString(),
-        nome: turma.nome,
-      }));
+    this.turmaService.getTurmas().subscribe(turmas => {
+      // Cria um array de observables para buscar os docentes de cada turma
+      const docentesObservables = turmas.map((turma) => 
+        this.docenteService.getDocenteById('1').pipe(
+          map(docente => ({ ...turma, docente })) // Mapeia o resultado para incluir o docente na turma
+        )
+      );
+  
+      // Usa forkJoin para esperar que todos os observables de docentes sejam concluídos
+      forkJoin(docentesObservables).subscribe(turmasComDocente => {
+        this.listagemTurmas = turmasComDocente.map((turma) => ({
+          id: turma.id,
+          nome: turma.nome,
+          docenteId: turma.docente,
+          dataInicio: turma.dataInicio,
+          dataTermino: turma.dataTermino,
+          horario: turma.horario,
+          cursoId: turma.cursoId
+        }));
+      });
     });
   }
-  
   
   buscarCep() {
     if (this.cadastroForm.value.cep) {

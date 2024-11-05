@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DocenteRequestInterface, DocenteResponseInterface} from '../../../shared/interfaces/docente.interface';
 import { map, Observable } from 'rxjs';
-import { MateriaInterface } from '../../../shared/interfaces/materia.interface';
+import { MateriaInterface, MateriaResponseInterface } from '../../../shared/interfaces/materia.interface';
 
 
 @Injectable({
@@ -78,7 +78,7 @@ export class DocenteService {
     return this.httpClient.delete<any>(`${this.url}/deletar/${id}`, { headers });
   }
 
-  getMateriasByDocenteId(id: string) : Observable<MateriaInterface[]> {
+  getMateriasByDocenteId(id: string) : Observable<MateriaResponseInterface[]> {
 
     return this.getDocenteById(id)
       .pipe(

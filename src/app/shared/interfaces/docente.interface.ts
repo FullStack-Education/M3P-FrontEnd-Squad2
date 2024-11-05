@@ -1,4 +1,4 @@
-import { MateriaInterface } from './materia.interface';
+import { MateriaInterface, MateriaResponseInterface } from './materia.interface';
 import { UsuarioInterface, UsuarioInterfaceResponse } from './usuarios.interface';
 
 
@@ -63,5 +63,5 @@ export interface DocenteResponseInterface {
   uf: string;
   referencia: string;
   usuario: UsuarioInterfaceResponse; 
-  materias: MateriaInterface[]; 
+  materias: MateriaResponseInterface[]; 
 }
