@@ -17,7 +17,7 @@
     </div>
 
     <div class="campo">
-      <label for="email">Email</label>
+      <label for="email">Email*</label>
       <input id="email" name="email" formControlName="email">
       <span *ngIf="(cadastroForm.controls['email'].touched) && cadastroForm.controls['email'].errors?.['email']"
         appLabelErro>Formato de email inválido!</span>

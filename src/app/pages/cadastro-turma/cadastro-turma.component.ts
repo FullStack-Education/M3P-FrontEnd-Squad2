@@ -136,7 +136,6 @@ export class CadastroTurmaComponent implements OnInit {
 
   cadastrar(turma: TurmaRequestInterface){
 
-    console.log(turma)
     this.turmaService.postTurma(turma).subscribe((retorno) => {
       window.alert("Turma cadastrada com sucesso!");
       this.router.navigate(['/inicio']);
