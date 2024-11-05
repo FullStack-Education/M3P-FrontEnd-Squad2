@@ -75,7 +75,7 @@ export class InicioAlunoComponent implements OnInit {
 
   buscarCursoAluno(idAluno: string) {
     this.alunoService.getAlunoById(idAluno).subscribe((aluno) => {
-      const cursoId = aluno.turma.curso;
+      const cursoId = aluno.turma.cursoId;
       this.cursoService
         .getNomeCursoById(cursoId.toString())
         .subscribe((nomeCurso) => {

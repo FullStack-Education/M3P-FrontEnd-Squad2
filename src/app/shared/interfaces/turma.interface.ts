@@ -28,8 +28,8 @@ export interface TurmaRequestInterface {
 export interface TurmaResponseInterface {
   id: string;
   nome: string;
-  docente: number | DocenteResponseInterface;
-  curso: number | CursoRequestInterface;
+  docenteId: number | DocenteResponseInterface;
+  cursoId: number | CursoRequestInterface;
   dataInicio: string;
   dataTermino: string;
   horario: string;

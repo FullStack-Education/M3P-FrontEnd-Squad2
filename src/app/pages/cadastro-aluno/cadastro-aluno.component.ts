@@ -198,11 +198,11 @@ export class CadastroAlunoComponent implements OnInit {
         this.listagemTurmas = turmasComDocente.map((turma) => ({
           id: turma.id,
           nome: turma.nome,
-          docente: turma.docente,
+          docenteId: turma.docente,
           dataInicio: turma.dataInicio,
           dataTermino: turma.dataTermino,
           horario: turma.horario,
-          curso: turma.curso
+          cursoId: turma.cursoId
         }));
       });
     });

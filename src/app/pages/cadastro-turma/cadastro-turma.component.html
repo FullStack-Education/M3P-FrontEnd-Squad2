@@ -26,7 +26,7 @@
           {{ docente.nome }}
         </option>
       </select>
-      <select *ngIf="perfilUsuarioLogado === 'docente'" id="docente" name="docente" formControlName="docente">
+      <select *ngIf="perfilUsuarioLogado === 'docente'" id="docente" name="docente" (ngModelChange)="obterCursos()" formControlName="docenteId">
         <option [value]="dadosDocenteLogado.id">{{dadosDocenteLogado.nome}}</option>
       </select>
       <span *ngIf="(cadastroForm.controls['docenteId'].touched) &&cadastroForm.controls['docenteId'].errors?.['required']"

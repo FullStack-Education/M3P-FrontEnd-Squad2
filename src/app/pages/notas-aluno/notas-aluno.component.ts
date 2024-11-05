@@ -69,7 +69,7 @@ export class NotasAlunoComponent implements OnInit {
           cpf: retorno.cpf,
         };
         this.docenteService
-          .getNomeDocenteById(retorno.turma.docente.toString())
+          .getNomeDocenteById(retorno.turma.docenteId.toString())
           .subscribe((nomeDocente) => {
             this.informacaoTurma = {
               docente: nomeDocente || '',
