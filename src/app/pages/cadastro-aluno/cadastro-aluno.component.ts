@@ -5,7 +5,7 @@ import { AlunoService } from '../../core/services/aluno/aluno.service';
 import { AlunoInterface } from '../../shared/interfaces/aluno.interface';
 import { TurmaService } from '../../core/services/turma/turma.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TurmaInterface } from '../../shared/interfaces/turma.interface';
+import { TurmaInterface, TurmaResponseInterface } from '../../shared/interfaces/turma.interface';
 import {
   NgSelectComponent,
   NgLabelTemplateDirective,
@@ -16,6 +16,8 @@ import { LabelErroDirective } from '../../core/directives/label-erro/label-erro.
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { dataNascimentoValidator } from '../../core/validators/dataNascimento/data-nascimento.validator';
 import { NotaService } from '../../core/services/nota/nota.service';
+import { DocenteService } from '../../core/services/docente/docente.service';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro-aluno',
@@ -36,7 +38,7 @@ import { NotaService } from '../../core/services/nota/nota.service';
 export class CadastroAlunoComponent implements OnInit {
   cadastroForm!: FormGroup;
   id!: string | null;
-  listagemTurmas2: TurmaInterface[] = [];
+  listagemTurmas: TurmaResponseInterface[] = [];
   alunoVinculadoNota: boolean | null = null;
   alunoVinculadoTurma: boolean | null = null;
 
@@ -46,6 +48,7 @@ export class CadastroAlunoComponent implements OnInit {
     private notaService: NotaService,
     public activatedRoute: ActivatedRoute,
     private cepService: ConsultaCepService,
+    private docenteService: DocenteService,
     private router: Router
   ) {}
 
@@ -87,7 +90,7 @@ export class CadastroAlunoComponent implements OnInit {
         Validators.minLength(12),
       ]),
       genero: new FormControl('', Validators.required),
-      turma: new FormControl([], Validators.required),
+      turma: new FormControl('', Validators.required),
       dataNascimento: new FormControl('',  [
         Validators.required,
         dataNascimentoValidator(),
@@ -116,9 +119,6 @@ export class CadastroAlunoComponent implements OnInit {
   onSubmit() {
     if (this.cadastroForm.valid) {
       const formValue = this.cadastroForm.value;
-      formValue.turma = this.listagemTurmas2.filter((turma) =>
-        formValue.turma.includes(turma.id)
-      );
 
       if (this.id) {
         //this.editar(this.cadastroForm.value);
@@ -131,6 +131,8 @@ export class CadastroAlunoComponent implements OnInit {
   }
 
   cadastrar(usuario: AlunoInterface) {
+    console.log(this.cadastroForm.value)
+
     this.alunoService
       .postAluno(this.cadastroForm.value)
       .subscribe((retorno) => {
@@ -174,19 +176,30 @@ export class CadastroAlunoComponent implements OnInit {
     }
   }
 
-
   obterTurmas() {
-    this.turmaService.getTurmas().subscribe((turmas) => {
-      this.listagemTurmas2 = turmas.map((turma) => ({
-        id: turma.id,
-        nomeTurma: turma.nomeTurma,
-        docente: turma.docente,
-        dataInicio: turma.dataInicio,
-        dataTermino: turma.dataTermino,
-        horario: turma.horario,
-      }));
+    this.turmaService.getTurmas().subscribe(turmas => {
+      // Cria um array de observables para buscar os docentes de cada turma
+      const docentesObservables = turmas.map((turma) => 
+        this.docenteService.getDocenteById('1').pipe(
+          map(docente => ({ ...turma, docente })) // Mapeia o resultado para incluir o docente na turma
+        )
+      );
+  
+      // Usa forkJoin para esperar que todos os observables de docentes sejam concluídos
+      forkJoin(docentesObservables).subscribe(turmasComDocente => {
+        this.listagemTurmas = turmasComDocente.map((turma) => ({
+          id: turma.id,
+          nome: turma.nome,
+          docente: turma.docente,
+          dataInicio: turma.dataInicio,
+          dataTermino: turma.dataTermino,
+          horario: turma.horario,
+          curso: turma.curso
+        }));
+      });
     });
   }
+  
 
   buscarCep() {
     if (this.cadastroForm.value.cep) {

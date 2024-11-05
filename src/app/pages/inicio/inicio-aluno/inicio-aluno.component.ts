@@ -76,7 +76,7 @@ export class InicioAlunoComponent implements OnInit {
     this.docentesIds.forEach((id) => {
       this.docenteService.getMateriasByDocenteId(id).subscribe((materias) => {
         materias.forEach((materia) => {
-          this.materiasDosDocentes.push({ nomeMateria: materia.nomeMateria });
+          this.materiasDosDocentes.push({ nomeMateria: materia.nome });
         });
       });
     });

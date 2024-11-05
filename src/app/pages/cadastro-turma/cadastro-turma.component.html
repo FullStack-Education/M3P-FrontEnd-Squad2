@@ -2,18 +2,18 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="cadastroForm">
 
     <div class="campo">
-      <label for="nomeTurma">Nome da Turma*</label>
-      <input id="nomeTurma" name="nomeTurma" formControlName="nomeTurma">
+      <label for="nome">Nome da Turma*</label>
+      <input id="nome" name="nome" formControlName="nome">
       <span
-        *ngIf="(cadastroForm.controls['nomeTurma'].touched) &&cadastroForm.controls['nomeTurma'].errors?.['required']"
+        *ngIf="(cadastroForm.controls['nome'].touched) &&cadastroForm.controls['nome'].errors?.['required']"
         appLabelErro>Campo Obrigatório!</span>
       <span
-        *ngIf="(cadastroForm.controls['nomeTurma'].touched) && cadastroForm.controls['nomeTurma'].errors?.['minlength']"
+        *ngIf="(cadastroForm.controls['nome'].touched) && cadastroForm.controls['nome'].errors?.['minlength']"
         appLabelErro>
         O nome deve ter pelo menos 8 caracteres.
       </span>
       <span
-        *ngIf="(cadastroForm.controls['nomeTurma'].touched) && cadastroForm.controls['nomeTurma'].errors?.['maxlength']"
+        *ngIf="(cadastroForm.controls['nome'].touched) && cadastroForm.controls['nome'].errors?.['maxlength']"
         appLabelErro>
         O nome deve ter no máximo 64 caracteres.
       </span>
@@ -21,7 +21,7 @@
 
     <div class="campo">
       <label for="docente">Docente*</label>
-      <select *ngIf="perfilUsuarioLogado === 'administrador'" id="docente" name="docente" formControlName="docente">
+      <select *ngIf="perfilUsuarioLogado === 'administrador'" id="docente" name="docente" (ngModelChange)="obterCursos()"  formControlName="docenteId">
         <option *ngFor="let docente of listagemDocentes" [value]="docente.id">
           {{ docente.nome }}
         </option>
@@ -29,7 +29,21 @@
       <select *ngIf="perfilUsuarioLogado === 'docente'" id="docente" name="docente" formControlName="docente">
         <option [value]="dadosDocenteLogado.id">{{dadosDocenteLogado.nome}}</option>
       </select>
-      <span *ngIf="(cadastroForm.controls['docente'].touched) &&cadastroForm.controls['docente'].errors?.['required']"
+      <span *ngIf="(cadastroForm.controls['docenteId'].touched) &&cadastroForm.controls['docenteId'].errors?.['required']"
+        appLabelErro>Campo Obrigatório!</span>
+    </div>
+
+    <div class="campo">
+      <label for="cursos">Nome da cursos*</label>
+
+      <select id="cursos" name="cursos" formControlName="cursoId">
+        <option *ngFor="let cursos of listagemCursos" [value]="cursos.id">
+          {{ cursos.nome }}
+        </option>
+      </select>
+      
+      <span
+        *ngIf="(cadastroForm.controls['cursoId'].touched) && cadastroForm.controls['cursoId'].errors?.['required']"
         appLabelErro>Campo Obrigatório!</span>
     </div>
 

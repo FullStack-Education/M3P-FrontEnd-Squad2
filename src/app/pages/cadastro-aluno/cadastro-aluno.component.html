@@ -58,9 +58,9 @@
 
     <div class="campo">
       <label>Turmas*</label>
-      <ng-select id="turma" formControlName="turma" [items]="listagemTurmas2" bindLabel="nomeTurma" bindValue="id"
-        [multiple]="true" placeholder="Selecione as turmas" [closeOnSelect]="false">
-      </ng-select>
+      <select id="turma" formControlName="turma">
+        <option *ngFor="let turma of listagemTurmas" [value]="turma.id">{{ turma.nome }}</option>
+      </select>
       <span *ngIf="(cadastroForm.controls['turma'].touched) &&cadastroForm.controls['turma'].errors?.['required']"
         appLabelErro>Campo Obrigatório!</span>
     </div>

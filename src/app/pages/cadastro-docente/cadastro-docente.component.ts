@@ -123,6 +123,14 @@ export class CadastroDocenteComponent implements OnInit {
         formValue.materiasIds.includes(materia.id)
       );
 
+      var ids: string[] = []
+
+      for (var materias of formValue.materiasIds) {
+        ids.push(materias.id)
+      }
+
+      formValue.materiasIds = ids
+
       if (this.id) {
         this.editar(this.cadastroForm.value);
       } else {
