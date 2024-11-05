@@ -1,10 +1,10 @@
-import { TurmaInterface } from "./turma.interface";
+import { TurmaInterface, TurmaRequestInterface, TurmaResponseInterface} from "./turma.interface";
 import { UsuarioInterface, UsuarioInterfaceRequest, UsuarioInterfaceResponse } from "./usuarios.interface";
 
 
 
 export interface AlunoInterface {
-  id: string;
+  id: number;
   nome: string;
   perfil: string
   telefone: string;
@@ -38,7 +38,7 @@ export interface AlunoInterfaceRequest {
   perfil: string
   telefone: string;
   genero: string;
-  turma: TurmaInterface[];
+  turma: TurmaRequestInterface;
   dataNascimento: string;
   cpf: string;
   rg: string;
@@ -60,7 +60,7 @@ export interface AlunoInterfaceResponse {
   perfil: string
   telefone: string;
   genero: string;
-  turma: TurmaInterface[];
+  turma: TurmaResponseInterface;
   dataNascimento: string;
   cpf: string;
   rg: string;

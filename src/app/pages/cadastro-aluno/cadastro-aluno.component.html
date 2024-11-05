@@ -57,11 +57,13 @@
     </div>
 
     <div class="campo">
-      <label>Turmas*</label>
-      <select id="turma" formControlName="turma">
-        <option *ngFor="let turma of listagemTurmas" [value]="turma.id">{{ turma.nome }}</option>
+      <label for="turma">Turma*</label>
+      <select id="turma" name="turma" formControlName="turma">
+        <option *ngFor="let turma of listagemTurmas" [value]="turma.id">
+          {{ turma.nome }}
+        </option>
       </select>
-      <span *ngIf="(cadastroForm.controls['turma'].touched) &&cadastroForm.controls['turma'].errors?.['required']"
+      <span *ngIf="(cadastroForm.controls['turma'].touched) && cadastroForm.controls['turma'].errors?.['required']"
         appLabelErro>Campo Obrigatório!</span>
     </div>
 
@@ -118,8 +120,10 @@
     </div>
 
     <div class="campo">
-      <label for="cep">CEP</label>
+      <label for="cep">CEP*</label>
       <input id="cep" name="cep" formControlName="cep" (blur)="buscarCep()">
+      <span *ngIf="(cadastroForm.controls['cep'].touched) && cadastroForm.controls['cep'].errors?.['required']"
+    appLabelErro>Campo Obrigatório!</span>
     </div>
     <div class="campo">
       <label for="logradouro">Rua</label>
@@ -142,8 +146,10 @@
       <input id="localidade" name="localidade" formControlName="localidade">
     </div>
     <div class="campo">
-      <label for="uf">Estado</label>
+      <label for="uf">Estado*</label>
       <input id="uf" name="uf" formControlName="uf">
+      <span *ngIf="(cadastroForm.controls['uf'].touched) && cadastroForm.controls['uf'].errors?.['required']"
+      appLabelErro>Campo Obrigatório!</span>
     </div>
     <div class="campo">
       <label for="referencia">Ponto de referência</label>

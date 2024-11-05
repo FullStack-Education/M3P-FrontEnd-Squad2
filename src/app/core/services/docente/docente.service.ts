@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DocenteInterface, DocenteRequestInterface, DocenteResponseInterface} from '../../../shared/interfaces/docente.interface';
+import { DocenteRequestInterface, DocenteResponseInterface} from '../../../shared/interfaces/docente.interface';
 import { map, Observable } from 'rxjs';
 import { MateriaInterface, MateriaResponseInterface } from '../../../shared/interfaces/materia.interface';
 
@@ -23,14 +23,15 @@ export class DocenteService {
     return this.httpClient.get<DocenteResponseInterface[]>(`${this.url}/buscar`, { headers });
   }
 
-  getDocenteByUserId(userId: string): Observable<string | null> {
-    return this.getDocentes().pipe(
-      map(docentes => {
-        const docente = docentes.find(d => d.usuario.id.toString() === userId.toString());
-        return docente ? docente.id : null;
-      })  
-    );
-  } 
+    getDocenteByUserId(userId: string): Observable<DocenteResponseInterface | null> {
+      return this.getDocentes().pipe(
+        map(docentes => {
+          const docente = docentes.find(d => d.usuario.id.toString() === userId.toString());
+          return docente || null; 
+        })
+      );
+    }
+    
   
   getDocenteNomeByUserId(userId: string): Observable<string | null> {
     return this.getDocentes().pipe(

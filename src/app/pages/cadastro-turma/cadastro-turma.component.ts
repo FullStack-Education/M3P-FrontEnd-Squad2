@@ -80,7 +80,7 @@ export class CadastroTurmaComponent implements OnInit {
 
   obterCursos() {
     this.listagemCursos = []
-    var docenteId = this.cadastroForm.get('docenteId')?.value as string;
+    var docenteId = this.cadastroForm.get('docenteId')?.value;
 
     this.docenteService.getDocenteById(docenteId).subscribe(retorno => {
       this.obterCursoDocente(retorno.materias)
@@ -140,6 +140,10 @@ export class CadastroTurmaComponent implements OnInit {
     this.turmaService.postTurma(turma).subscribe((retorno) => {
       window.alert("Turma cadastrada com sucesso!");
       this.router.navigate(['/inicio']);
-    })
+    }, error => {
+      alert('Erro ao cadastrar turma: o curso selecionado não corresponde a nenhum curso ministrado pelo docente escolhido. '); 
+    });
   }
+  
 }
+

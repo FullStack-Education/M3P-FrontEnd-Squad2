@@ -61,7 +61,7 @@ export class TurmaService {
   verificarDocenteEmTurmas(docenteId: string) {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     return this.httpClient
@@ -70,4 +70,6 @@ export class TurmaService {
         map((turmas) => turmas.some((turma) => turma.docente === docenteId))
       );
   }
+
+  
 }

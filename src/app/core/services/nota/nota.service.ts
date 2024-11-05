@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NotaInterface } from '../../../shared/interfaces/nota.interface';
-import { map } from 'rxjs';
-import { environment } from '../../../shared/environments/environment';
+import { NotaInterface, NotaInterfaceRequest, NotaInterfaceResponse } from '../../../shared/interfaces/nota.interface';
+import { map, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +13,17 @@ export class NotaService {
 
   constructor(private httpClient: HttpClient) {}
 
+  getNotas(): Observable<NotaInterfaceResponse[]> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.httpClient.get<NotaInterfaceResponse[]>(`${this.url}/buscar`, {
+      headers,
+    });
+  }
+
   getNotasByIdAluno(idAluno: string) {
     return this.httpClient.get<Array<NotaInterface>>(this.url, {
       params: {
@@ -21,9 +32,16 @@ export class NotaService {
     });
   }
 
-  postNota(nota: NotaInterface) {
-    return this.httpClient.post<any>(this.url, nota);
+  postNota(nota: NotaInterfaceRequest) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.httpClient.post<NotaInterfaceResponse>(`${this.url}/criar`, nota, { headers });
   }
+
+
 
   verificarDocenteEmNotas(docenteId: string) {
     const token = sessionStorage.getItem('token');
@@ -37,8 +55,9 @@ export class NotaService {
   }
 
   verificarAlunoEmNotas(alunoId: string) {
-    return this.httpClient
-      .get<Array<NotaInterface>>(this.url)
-      .pipe(map((notas) => notas.some((nota) => nota.aluno === alunoId)));
+    return this.getNotas().pipe(
+      map((notas) => notas.some((nota) => nota.alunoId.toString() === alunoId))
+    );
   }
+
 }

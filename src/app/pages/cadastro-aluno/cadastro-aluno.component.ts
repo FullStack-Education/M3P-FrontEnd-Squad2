@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlunoService } from '../../core/services/aluno/aluno.service';
-import { AlunoInterface } from '../../shared/interfaces/aluno.interface';
+import { AlunoInterfaceRequest} from '../../shared/interfaces/aluno.interface';
 import { TurmaService } from '../../core/services/turma/turma.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TurmaInterface, TurmaResponseInterface } from '../../shared/interfaces/turma.interface';
@@ -40,7 +40,7 @@ export class CadastroAlunoComponent implements OnInit {
   id!: string | null;
   listagemTurmas: TurmaResponseInterface[] = [];
   alunoVinculadoNota: boolean | null = null;
-  alunoVinculadoTurma: boolean | null = null;
+  
 
   constructor(
     private alunoService: AlunoService,
@@ -62,13 +62,12 @@ export class CadastroAlunoComponent implements OnInit {
         if (retorno) {
           this.cadastroForm.patchValue({
             ...retorno,
-            turma: retorno.turma.map((turma) => turma.id),
+            turma: retorno.turma.id, 
           });
         }
-      });
+      }); 
 
       this.verificarAlunoEmNota(this.id);
-      this. verificarAlunoEmTurmas(this.id);
     }
   }
 
@@ -105,68 +104,77 @@ export class CadastroAlunoComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      cep: new FormControl(''),
+      cep: new FormControl('', Validators.required),
       logradouro: new FormControl(''),
       numero: new FormControl(''),
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       localidade: new FormControl(''),
-      uf: new FormControl(''),
+      uf: new FormControl('', Validators.required),
       referencia: new FormControl(''),
     });
   }
+
 
   onSubmit() {
     if (this.cadastroForm.valid) {
       const formValue = this.cadastroForm.value;
 
       if (this.id) {
-        //this.editar(this.cadastroForm.value);
+        this.editar(this.cadastroForm.value);
       } else {
-        this.cadastrar(this.cadastroForm.value);
+        this.cadastrar(formValue); 
       }
     } else {
       alert('Preencha todos os campos marcados com um *');
     }
   }
 
-  cadastrar(usuario: AlunoInterface) {
-    console.log(this.cadastroForm.value)
-
-    this.alunoService
-      .postAluno(this.cadastroForm.value)
-      .subscribe((retorno) => {
-        window.alert('Aluno cadastrado com sucesso!');
-        this.router.navigate(['/inicio']);
-      });
-  }
-
-  /*
-  editar(usuario: AlunoInterface) {
-    usuario.id = this.id!;
-    this.alunoService.putAluno(usuario).subscribe((retorno) => {
-      window.alert('Aluno editado com sucesso!');
+  cadastrar(usuario: AlunoInterfaceRequest) {
+    this.alunoService.postAluno(usuario).subscribe((retorno) => {
+      window.alert('Aluno cadastrado com sucesso!');
       this.router.navigate(['/inicio']);
+    }, error => {
+      window.alert('Erro ao cadastrar aluno: email já cadastrado' + error.message);
     });
   }
-*/
-  verificarAlunoEmNota(alunoId: string) {
-    this.notaService.verificarAlunoEmNotas(alunoId).subscribe((retorno) => {
-      this.alunoVinculadoNota = retorno;
-    });
-  }
+  
 
-  verificarAlunoEmTurmas(alunoId: string){
-    this.alunoService.alunoMatriculadoEmTurmas(alunoId).subscribe((retorno) => {
-      this.alunoVinculadoTurma = retorno;
-    });
+  
+  editar(usuario: AlunoInterfaceRequest) {
+    if (this.id) {
+      this.alunoService.putAluno(this.id, usuario).subscribe(
+        (retorno) => {
+          window.alert('Aluno editado com sucesso!');
+          this.router.navigate(['/inicio']);
+        },
+        (error) => {
+          window.alert('Erro ao editar aluno: email já cadastrado ' );
+        }
+      );
+    }
   }
+  
+
+
+  verificarAlunoEmNota(alunoId: string) {
+    this.notaService.verificarAlunoEmNotas(alunoId).subscribe(
+      (retorno) => {
+        this.alunoVinculadoNota = retorno;
+      },
+      (error) => {
+        console.error('Erro ao verificar aluno em notas:', error);
+        this.alunoVinculadoNota = false; 
+      }
+    );
+  }
+  
 
 
   excluir(){
     if (this.id) {
-      if (this.alunoVinculadoNota && this.alunoVinculadoTurma) {
-        alert('Aluno não pode ser excluído por estar vínculado a turma e/ou avaliações');
+      if (this.alunoVinculadoNota) {
+        alert('Aluno não pode ser excluído por estar vínculado a  avaliações');
       } else {
         this.alunoService.deleteAluno(this.id).subscribe(() => {
           window.alert('Aluno excluído com sucesso!');
@@ -200,7 +208,6 @@ export class CadastroAlunoComponent implements OnInit {
     });
   }
   
-
   buscarCep() {
     if (this.cadastroForm.value.cep) {
       this.cepService.buscarCep(this.cadastroForm.value.cep).subscribe({
