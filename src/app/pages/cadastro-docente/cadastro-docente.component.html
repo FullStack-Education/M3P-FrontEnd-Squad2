@@ -128,16 +128,18 @@
 
     <div class="campo">
       <label>Matérias*</label>
-      <ng-select id="materias" formControlName="materias" [items]="listagemMaterias" bindLabel="nomeMateria"
+      <ng-select id="materias" formControlName="materiasIds" [items]="listagemMaterias" bindLabel="nomeMateria"
         bindValue="id" [multiple]="true" placeholder="Selecione as matérias" [closeOnSelect]="false">
       </ng-select>
-      <span *ngIf="(cadastroForm.controls['materias'].touched) &&cadastroForm.controls['materias'].errors?.['required']"
+      <span *ngIf="(cadastroForm.controls['materiasIds'].touched) &&cadastroForm.controls['materiasIds'].errors?.['required']"
         appLabelErro>Campo Obrigatório!</span>
     </div>
 
     <div class="campo">
-      <label for="cep">CEP</label>
+      <label for="cep">CEP*</label>
       <input id="cep" name="cep" formControlName="cep" (blur)="buscarCep()">
+      <span *ngIf="(cadastroForm.controls['cep'].touched) && cadastroForm.controls['cep'].errors?.['required']"
+      appLabelErro>Campo Obrigatório!</span>
     </div>
     <div class="campo">
       <label for="logradouro">Rua</label>
@@ -160,8 +162,10 @@
       <input id="localidade" name="localidade" formControlName="localidade">
     </div>
     <div class="campo">
-      <label for="uf">Estado</label>
+      <label for="uf">Estado*</label>
       <input id="uf" name="uf" formControlName="uf">
+      <span *ngIf="(cadastroForm.controls['uf'].touched) && cadastroForm.controls['uf'].errors?.['required']"
+      appLabelErro>Campo Obrigatório!</span>
     </div>
     <div class="campo">
       <label for="referencia">Ponto de referência</label>

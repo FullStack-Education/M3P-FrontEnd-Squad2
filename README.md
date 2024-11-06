@@ -1,79 +1,68 @@
-# Projeto LabPCP - Angular
+# Sistema para Gestão de Projetos Educacionais - Frontend
 
-Projeto final do segundo módulo do curso Floripa Mais Tec - Turma Fullstack Education
+Este projeto é uma aplicação frontend desenvolvida utilizando o framework Angular. Antes de rodar esta aplicação, é necessário que o backend esteja em funcionamento.
 
-Sistema para gestão de projetos educacionais construído utilizando o framework Angular
+## Tecnologias Usadas
 
-## Execução da aplicação
+Angular, TypeScript, HTML e CSS.
 
-No terminal, execute os seguintes comandos:
+## Pré-requisitos
 
-1. **Iniciar o servidor Angular:**
+Para que a aplicação funcione corretamente, o backend deve estar em funcionamento. Certifique-se de que o servidor da API esteja ativo antes de iniciar o frontend. O backend deve estar rodando na porta **8080** e você pode acessá-lo [neste link](https://github.com/FullStack-Education/M3P-BackEnd-Squad2).
+
+
+## Executando a Aplicação
+
+1. Navegue até a pasta do projeto frontend.
+2. Execute o seguinte comando para iniciar a aplicação com configuração de proxy:
+
    ```bash
-   ng serve
+   ng serve --proxy-config proxy.conf.json
 
-Isso iniciará a aplicação e gerará uma URL para você navegar.
+Isso irá gerar uma URL que levará à página de login.
 
-2. **Iniciar o servidor JSON:**
-   ```bash
-   json-server ./src/db/db.json
+## Usuários Pré-Cadastrados
 
-Isso iniciará o JSON Server para fornecer dados para a aplicação.
+A aplicação possui os seguintes usuários pré-cadastrados:
 
-Isso iniciará o JSON Server para fornecer dados para a aplicação.
-
-**Observação:** Caso o JSON Server não utilize a porta padrão 3000, você precisará atualizar a configuração da aplicação para corresponder à nova porta. Para isso:
-
-1. Abra o arquivo `environment.ts` localizado em `src/app/shared/environments`.
-2. Substitua o valor da variável `apiUrl` pela nova porta informada pelo JSON Server.
-
-   Por exemplo, se o JSON Server estiver rodando na porta 4000, altere o valor de `apiUrl` para `http://localhost:4000`.
-
-
-## Funcionamento
-
-Para acessar as páginas da aplicação, você precisará realizar o login na página de login.
-
-### Usuários Pré-Cadastrados
-
-Há usuários pré-cadastrados no sistema com perfis: administrador, docente e aluno. Use as seguintes credenciais para fazer login com cada perfil:
-
-- **Administrador:**
-  - Email: `adm@teste.com`
-  - Senha: `12345678`
-
-- **Docente:**
+- **Administrador**
+  - Email: `administrador@gmail.com`
+  - Senha: `123456`
+  
+- **Docente**
   - Email: `docente@teste.com`
-  - Senha: `12345678`
+  - Senha: `123456`
 
-- **Aluno:**
-  - Email: `aluno@teste.com`
-  - Senha: `12345678`
-
+- **Aluno**
+  - Email: `maria@teste.com`
+  - Senha: `123456`
 
 ## Páginas de Navegação
 
 Cada tipo de usuário será redirecionado para uma página inicial específica após o login. Abaixo estão as funcionalidades disponíveis para cada perfil:
 
-- **Administrador:**
-  - Após o login, o administrador será redirecionado para a página inicial que exibe:
-    - Estatísticas de docentes, alunos e turmas no sistema.
-    - Uma seção com a lista de alunos cadastrados e a possibilidade de realizar buscas por alunos específicos.
-  - No menu lateral, o administrador pode:
-    - Cadastrar docentes, alunos, turmas e notas.
-    - Buscar a lista de docentes cadastrados no sistema.
+### Administrador
+Após o login, o administrador será redirecionado para a página inicial que exibe:
+- Estatísticas de docentes, alunos e turmas no sistema.
+- Uma seção com a lista de alunos cadastrados e a possibilidade de realizar buscas por alunos específicos.
 
-- **Docente:**
-  - Após o login, o docente será redirecionado para a página inicial que exibe:
-    - A lista de alunos cadastrados no sistema, com a possibilidade de buscar por alunos específicos.
-  - No menu lateral, o docente pode:
-    - Cadastrar turmas.
-    - Cadastrar notas.
+No menu lateral, o administrador pode:
+- Cadastrar docentes, alunos, turmas e notas.
+- Buscar a lista de docentes cadastrados no sistema.
 
-- **Aluno:**
-  - Após o login, o aluno será redirecionado para a página inicial que exibe:
-    - Uma seção com avaliações realizadas pelo aluno.
-    - Uma seção com as matérias em que está matriculado.
-    - Uma seção com cursos extras.
-  - No menu lateral, o aluno pode:
-    - Consultar detalhes sobre suas avaliações e turmas em que está matriculado
+### Docente
+Após o login, o docente será redirecionado para a página inicial que exibe:
+- A lista de alunos cadastrados no sistema, com a possibilidade de buscar por alunos específicos.
+
+No menu lateral, o docente pode:
+- Cadastrar turmas.
+- Cadastrar notas.
+
+### Aluno
+Após o login, o aluno será redirecionado para a página inicial que exibe:
+- Uma seção com avaliações realizadas pelo aluno.
+- Uma seção com o curso que está matriculado.
+- Uma seção com cursos extras.
+
+No menu lateral, o aluno pode:
+- Consultar detalhes sobre suas avaliações e turmas em que está matriculado.

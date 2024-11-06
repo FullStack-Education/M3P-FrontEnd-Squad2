@@ -6,22 +6,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DocenteInterface } from '../../../shared/interfaces/docente.interface';
-import { DocenteService } from '../../../core/services/docente/docente.service';
+import {
+  DocenteInterface,
+  DocenteRequestInterface,
+} from '../../shared/interfaces/docente.interface';
+import { DocenteService } from '../../core/services/docente/docente.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MateriaService } from '../../../core/services/materia/materia.service';
-import { MateriaInterface } from '../../../shared/interfaces/materia.interface';
+import { MateriaService } from '../../core/services/materia/materia.service';
+import { MateriaInterface } from '../../shared/interfaces/materia.interface';
 import {
   NgSelectComponent,
   NgLabelTemplateDirective,
   NgOptionTemplateDirective,
 } from '@ng-select/ng-select';
-import { ConsultaCepService } from '../../../core/services/busca-cep/consulta-cep.service';
-import { LabelErroDirective } from '../../../core/directives/label-erro/label-erro.directive';
-import { dataNascimentoValidator } from '../../../core/validators/dataNascimento/data-nascimento.validator';
+import { ConsultaCepService } from '../../core/services/busca-cep/consulta-cep.service';
+import { LabelErroDirective } from '../../core/directives/label-erro/label-erro.directive';
+import { dataNascimentoValidator } from '../../core/validators/dataNascimento/data-nascimento.validator';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
-import { NotaService } from '../../../core/services/nota/nota.service';
-import { TurmaService } from '../../../core/services/turma/turma.service';
+import { NotaService } from '../../core/services/nota/nota.service';
+import { TurmaService } from '../../core/services/turma/turma.service';
 
 @Component({
   selector: 'app-cadastro-docente',
@@ -104,14 +107,14 @@ export class CadastroDocenteComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      materias: new FormControl([], Validators.required),
-      cep: new FormControl(''),
+      materiasIds: new FormControl([], Validators.required),
+      cep: new FormControl('', Validators.required),
       logradouro: new FormControl(''),
       numero: new FormControl(''),
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       localidade: new FormControl(''),
-      uf: new FormControl(''),
+      uf: new FormControl('', Validators.required),
       referencia: new FormControl(''),
     });
   }
@@ -119,35 +122,42 @@ export class CadastroDocenteComponent implements OnInit {
   onSubmit() {
     if (this.cadastroForm.valid) {
       const formValue = this.cadastroForm.value;
-      formValue.materias = this.listagemMaterias.filter((materia) =>
-        formValue.materias.includes(materia.id)
-      );
+      formValue.turma = formValue.turma;
 
       if (this.id) {
         this.editar(this.cadastroForm.value);
       } else {
-        this.cadastrar(this.cadastroForm.value);
+        this.cadastrar(formValue);
       }
     } else {
       alert('Preencha todos os campos marcados com um *');
     }
   }
 
-  cadastrar(usuario: DocenteInterface) {
-    this.docenteService
-      .postDocente(this.cadastroForm.value)
-      .subscribe((retorno) => {
+  cadastrar(usuario: DocenteRequestInterface) {
+    this.docenteService.postDocente(usuario).subscribe(
+      (retorno) => {
         window.alert('Docente cadastrado com sucesso!');
         this.router.navigate(['/listagem-docentes']);
-      });
+      },
+      (error) => {
+        window.alert(
+          'Erro ao cadastrar docente: email já cadastrado'
+        );
+      }
+    );
   }
 
-  editar(usuario: DocenteInterface) {
-    usuario.id = this.id!;
-    this.docenteService.putDocente(usuario).subscribe((retorno) => {
-      window.alert('Docente editado com sucesso!');
-      this.router.navigate(['/listagem-docentes']);
-    });
+  editar(usuario: DocenteRequestInterface) {
+    this.docenteService.putDocente(usuario, this.id!).subscribe(
+      (retorno) => {
+        window.alert('Docente editado com sucesso!');
+        this.router.navigate(['/listagem-docentes']);
+      },
+      (error) => {
+        window.alert('Erro ao editar docente: email já cadastrado ');
+      }
+    );
   }
 
   verificarDocenteEmTurma(docenteId: string) {
@@ -171,10 +181,17 @@ export class CadastroDocenteComponent implements OnInit {
           'Docente não pode ser excluído por estar vínculado a turma e/ou avaliações'
         );
       } else {
-        this.docenteService.deleteDocente(this.id).subscribe(() => {
-          window.alert('Docente excluído com sucesso!');
-          this.router.navigate(['/listagem-docentes']);
-        });
+        this.docenteService.deleteDocente(this.id).subscribe(
+          () => {
+            window.alert('Docente excluído com sucesso!');
+            this.router.navigate(['/listagem-docentes']);
+          },
+          (error) => {
+            window.alert(
+              'Erro ao excluir docente: não pode estar vinculado a turma e/ou avaliações '
+            );
+          }
+        );
       }
     }
   }
@@ -183,7 +200,7 @@ export class CadastroDocenteComponent implements OnInit {
     this.materiaService.getMaterias().subscribe((materias) => {
       this.listagemMaterias = materias.map((materia) => ({
         id: materia.id,
-        nomeMateria: materia.nomeMateria,
+        nomeMateria: materia.nome,
       }));
     });
   }

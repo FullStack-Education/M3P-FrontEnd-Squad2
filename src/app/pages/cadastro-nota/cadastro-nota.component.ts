@@ -9,7 +9,9 @@ import {
 import { NotaService } from '../../core/services/nota/nota.service';
 import { DocenteService } from '../../core/services/docente/docente.service';
 import { AlunoService } from '../../core/services/aluno/aluno.service';
-import { NotaInterface } from '../../shared/interfaces/nota.interface';
+import {
+  NotaInterfaceRequest,
+} from '../../shared/interfaces/nota.interface';
 import { MateriaService } from '../../core/services/materia/materia.service';
 import { LabelErroDirective } from '../../core/directives/label-erro/label-erro.directive';
 import { Router } from '@angular/router';
@@ -25,7 +27,7 @@ export class CadastroNotaComponent implements OnInit {
   cadastroForm!: FormGroup;
   listagemDocentes: Array<{ id: string; nome: string }> = [];
   listagemAlunos: Array<{ id: string; nome: string }> = [];
-  listagemMaterias: Array<{ id: string; nome: string }> = [];
+  listagemMaterias: Array<{ id: number; nome: string }> = [];
 
   perfilUsuarioLogado: string | null = null;
   idUsuarioLogado: string | null = null;
@@ -40,8 +42,8 @@ export class CadastroNotaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.perfilUsuarioLogado = sessionStorage.getItem('perfilUsuarioLogado');
-    this.idUsuarioLogado = sessionStorage.getItem('idUsuarioLogado');
+    this.perfilUsuarioLogado = sessionStorage.getItem('perfil');
+    this.idUsuarioLogado = sessionStorage.getItem('userId');
 
     this.criarForm();
     this.obterAlunos();
@@ -59,7 +61,7 @@ export class CadastroNotaComponent implements OnInit {
     this.cadastroForm = new FormGroup({
       aluno: new FormControl('', Validators.required),
       docente: new FormControl('', Validators.required),
-      nomeMateria: new FormControl('', Validators.required),
+      materiaId: new FormControl('', Validators.required),
       nomeAvaliacao: new FormControl('', Validators.required),
       dataAvaliacao: new FormControl('', Validators.required),
       valorNota: new FormControl('', [
@@ -73,26 +75,29 @@ export class CadastroNotaComponent implements OnInit {
   obterDocentes() {
     this.docenteService.getDocentes().subscribe((docentes) => {
       this.listagemDocentes = docentes.map((docente) => ({
-        id: docente.id,
+        id: docente.id.toString(),
         nome: docente.nome,
       }));
     });
   }
 
   obterDocenteLogado(id: string) {
-    this.docenteService.getDocenteById(id).subscribe((retorno) => {
-      this.dadosDocenteLogado = {
-        id: retorno.id,
-        nome: retorno.nome,
-      };
-      this.cadastroForm.get('docente')?.setValue(this.dadosDocenteLogado.id);
+    this.docenteService.getDocenteByUserId(id).subscribe((retorno) => {
+      if (retorno) { 
+        this.dadosDocenteLogado = {
+          id: retorno.id,
+          nome: retorno.nome,
+        };
+        this.cadastroForm.get('docente')?.setValue(this.dadosDocenteLogado.id);
+      }
     });
   }
+  
 
   obterAlunos() {
     this.alunoService.getAlunos().subscribe((alunos) => {
       this.listagemAlunos = alunos.map((aluno) => ({
-        id: aluno.id,
+        id: aluno.id.toString(),
         nome: aluno.nome,
       }));
     });
@@ -101,8 +106,8 @@ export class CadastroNotaComponent implements OnInit {
   obterMaterias() {
     this.materiaService.getMaterias().subscribe((materias) => {
       this.listagemMaterias = materias.map((materia) => ({
-        id: materia.id,
-        nome: materia.nomeMateria,
+        id: Number(materia.id),
+        nome: materia.nome,
       }));
     });
   }
@@ -124,8 +129,21 @@ export class CadastroNotaComponent implements OnInit {
     }
   }
 
-  cadastrar(nota: NotaInterface) {
-    this.notaService.postNota(this.cadastroForm.value).subscribe((retorno) => {
+  cadastrar(nota: NotaInterfaceRequest) {
+    const alunoId = Number(this.cadastroForm.get('aluno')?.value);
+    const docenteId = Number(this.cadastroForm.get('docente')?.value);
+    const materiaId = Number(this.cadastroForm.get('materiaId')?.value);
+
+    const notaRequest: NotaInterfaceRequest = {
+      nome: this.cadastroForm.get('nomeAvaliacao')?.value,
+      valor: this.cadastroForm.get('valorNota')?.value,
+      dataAvaliacao: this.cadastroForm.get('dataAvaliacao')?.value,
+      alunoId: alunoId,
+      docenteId: docenteId,
+      materiaId: materiaId,
+    };
+
+    this.notaService.postNota(notaRequest).subscribe((retorno) => {
       window.alert('Nota cadastrada com sucesso!');
       this.router.navigate(['/inicio']);
     });

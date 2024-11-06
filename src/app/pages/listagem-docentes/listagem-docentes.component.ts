@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DocenteService } from '../../core/services/docente/docente.service';
 
+
 @Component({
   selector: 'app-listagem-docentes',
   standalone: true,
@@ -48,13 +49,11 @@ export class ListagemDocentesComponent implements OnInit {
 
   pesquisar() {
     if (this.textoPesquisa) {
-      this.listagemUsuariosPesquisa = this.listagemUsuarios.filter(
-        (usuario) =>
-          usuario.nome
-            .toUpperCase()
-            .includes(this.textoPesquisa!.toUpperCase()) ||
-          usuario.id?.toUpperCase().includes(this.textoPesquisa!.toUpperCase())
-      );
+      this.listagemUsuariosPesquisa = this.listagemUsuarios.filter((usuario) => {
+        const nome = usuario.nome.toUpperCase();
+        const id = String(usuario.id).toUpperCase(); 
+        return nome.includes(this.textoPesquisa.toUpperCase()) || id.includes(this.textoPesquisa.toUpperCase());
+      });
     } else {
       this.listagemUsuariosPesquisa = this.listagemUsuarios;
     }

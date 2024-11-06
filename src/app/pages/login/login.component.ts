@@ -19,11 +19,12 @@ export class LoginComponent {
 
   constructor(private loginService: LoginService, private router: Router) {}
 
+
   onSubmit() {
-    if (this.loginFormModel.email == '' || this.loginFormModel.senha == '') {
-      alert('Todos os campos precisam ser preenchidos');
+    if (this.loginFormModel.email && this.loginFormModel.senha) {
+      this.loginService.login(this.loginFormModel).subscribe();
     } else {
-      this.loginService.login(this.loginFormModel);
+      alert('Todos os campos precisam ser preenchidos');
     }
   }
 

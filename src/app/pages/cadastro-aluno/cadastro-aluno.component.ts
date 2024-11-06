@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlunoService } from '../../core/services/aluno/aluno.service';
-import { AlunoInterface } from '../../shared/interfaces/aluno.interface';
+import { AlunoInterfaceRequest} from '../../shared/interfaces/aluno.interface';
 import { TurmaService } from '../../core/services/turma/turma.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TurmaInterface } from '../../shared/interfaces/turma.interface';
+import { TurmaInterface, TurmaResponseInterface } from '../../shared/interfaces/turma.interface';
 import {
   NgSelectComponent,
   NgLabelTemplateDirective,
@@ -16,6 +16,8 @@ import { LabelErroDirective } from '../../core/directives/label-erro/label-erro.
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { dataNascimentoValidator } from '../../core/validators/dataNascimento/data-nascimento.validator';
 import { NotaService } from '../../core/services/nota/nota.service';
+import { DocenteService } from '../../core/services/docente/docente.service';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro-aluno',
@@ -36,9 +38,9 @@ import { NotaService } from '../../core/services/nota/nota.service';
 export class CadastroAlunoComponent implements OnInit {
   cadastroForm!: FormGroup;
   id!: string | null;
-  listagemTurmas2: TurmaInterface[] = [];
+  listagemTurmas: TurmaResponseInterface[] = [];
   alunoVinculadoNota: boolean | null = null;
-  alunoVinculadoTurma: boolean | null = null;
+  
 
   constructor(
     private alunoService: AlunoService,
@@ -46,6 +48,7 @@ export class CadastroAlunoComponent implements OnInit {
     private notaService: NotaService,
     public activatedRoute: ActivatedRoute,
     private cepService: ConsultaCepService,
+    private docenteService: DocenteService,
     private router: Router
   ) {}
 
@@ -59,13 +62,12 @@ export class CadastroAlunoComponent implements OnInit {
         if (retorno) {
           this.cadastroForm.patchValue({
             ...retorno,
-            turma: retorno.turma.map((turma) => turma.id),
+            turma: retorno.turma.id, 
           });
         }
-      });
+      }); 
 
       this.verificarAlunoEmNota(this.id);
-      this. verificarAlunoEmTurmas(this.id);
     }
   }
 
@@ -87,7 +89,7 @@ export class CadastroAlunoComponent implements OnInit {
         Validators.minLength(12),
       ]),
       genero: new FormControl('', Validators.required),
-      turma: new FormControl([], Validators.required),
+      turma: new FormControl('', Validators.required),
       dataNascimento: new FormControl('',  [
         Validators.required,
         dataNascimentoValidator(),
@@ -102,68 +104,77 @@ export class CadastroAlunoComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      cep: new FormControl(''),
+      cep: new FormControl('', Validators.required),
       logradouro: new FormControl(''),
       numero: new FormControl(''),
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       localidade: new FormControl(''),
-      uf: new FormControl(''),
+      uf: new FormControl('', Validators.required),
       referencia: new FormControl(''),
     });
   }
 
+
   onSubmit() {
     if (this.cadastroForm.valid) {
       const formValue = this.cadastroForm.value;
-      formValue.turma = this.listagemTurmas2.filter((turma) =>
-        formValue.turma.includes(turma.id)
-      );
 
       if (this.id) {
         this.editar(this.cadastroForm.value);
       } else {
-        this.cadastrar(this.cadastroForm.value);
+        this.cadastrar(formValue); 
       }
     } else {
       alert('Preencha todos os campos marcados com um *');
     }
   }
 
-  cadastrar(usuario: AlunoInterface) {
-    this.alunoService
-      .postAluno(this.cadastroForm.value)
-      .subscribe((retorno) => {
-        window.alert('Aluno cadastrado com sucesso!');
-        this.router.navigate(['/inicio']);
-      });
-  }
-
-  editar(usuario: AlunoInterface) {
-    usuario.id = this.id!;
-    this.alunoService.putAluno(usuario).subscribe((retorno) => {
-      window.alert('Aluno editado com sucesso!');
+  cadastrar(usuario: AlunoInterfaceRequest) {
+    this.alunoService.postAluno(usuario).subscribe((retorno) => {
+      window.alert('Aluno cadastrado com sucesso!');
       this.router.navigate(['/inicio']);
+    }, error => {
+      window.alert('Erro ao cadastrar aluno: email já cadastrado' + error.message);
     });
   }
+  
+
+  
+  editar(usuario: AlunoInterfaceRequest) {
+    if (this.id) {
+      this.alunoService.putAluno(this.id, usuario).subscribe(
+        (retorno) => {
+          window.alert('Aluno editado com sucesso!');
+          this.router.navigate(['/inicio']);
+        },
+        (error) => {
+          window.alert('Erro ao editar aluno: email já cadastrado ' );
+        }
+      );
+    }
+  }
+  
+
 
   verificarAlunoEmNota(alunoId: string) {
-    this.notaService.verificarAlunoEmNotas(alunoId).subscribe((retorno) => {
-      this.alunoVinculadoNota = retorno;
-    });
+    this.notaService.verificarAlunoEmNotas(alunoId).subscribe(
+      (retorno) => {
+        this.alunoVinculadoNota = retorno;
+      },
+      (error) => {
+        console.error('Erro ao verificar aluno em notas:', error);
+        this.alunoVinculadoNota = false; 
+      }
+    );
   }
-
-  verificarAlunoEmTurmas(alunoId: string){
-    this.alunoService.alunoMatriculadoEmTurmas(alunoId).subscribe((retorno) => {
-      this.alunoVinculadoTurma = retorno;
-    });
-  }
+  
 
 
   excluir(){
     if (this.id) {
-      if (this.alunoVinculadoNota && this.alunoVinculadoTurma) {
-        alert('Aluno não pode ser excluído por estar vínculado a turma e/ou avaliações');
+      if (this.alunoVinculadoNota) {
+        alert('Aluno não pode ser excluído por estar vínculado a  avaliações');
       } else {
         this.alunoService.deleteAluno(this.id).subscribe(() => {
           window.alert('Aluno excluído com sucesso!');
@@ -173,20 +184,30 @@ export class CadastroAlunoComponent implements OnInit {
     }
   }
 
-
   obterTurmas() {
-    this.turmaService.getTurmas().subscribe((turmas) => {
-      this.listagemTurmas2 = turmas.map((turma) => ({
-        id: turma.id,
-        nomeTurma: turma.nomeTurma,
-        docente: turma.docente,
-        dataInicio: turma.dataInicio,
-        dataTermino: turma.dataTermino,
-        horario: turma.horario,
-      }));
+    this.turmaService.getTurmas().subscribe(turmas => {
+      // Cria um array de observables para buscar os docentes de cada turma
+      const docentesObservables = turmas.map((turma) => 
+        this.docenteService.getDocenteById('1').pipe(
+          map(docente => ({ ...turma, docente })) // Mapeia o resultado para incluir o docente na turma
+        )
+      );
+  
+      // Usa forkJoin para esperar que todos os observables de docentes sejam concluídos
+      forkJoin(docentesObservables).subscribe(turmasComDocente => {
+        this.listagemTurmas = turmasComDocente.map((turma) => ({
+          id: turma.id,
+          nome: turma.nome,
+          docenteId: turma.docente,
+          dataInicio: turma.dataInicio,
+          dataTermino: turma.dataTermino,
+          horario: turma.horario,
+          cursoId: turma.cursoId
+        }));
+      });
     });
   }
-
+  
   buscarCep() {
     if (this.cadastroForm.value.cep) {
       this.cepService.buscarCep(this.cadastroForm.value.cep).subscribe({

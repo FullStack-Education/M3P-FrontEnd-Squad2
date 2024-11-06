@@ -1,23 +1,47 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MateriaInterface } from '../../../shared/interfaces/materia.interface';
-import { environment } from '../../../shared/environments/environment';
+import {
+  MateriaResponseInterface,
+} from '../../../shared/interfaces/materia.interface';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MateriaService {
+  private url = '/api/materias';
 
-  url = `${environment.apiUrl}/materias`
-  
+  constructor(private httpClient: HttpClient) {}
 
-  constructor(private httpClient: HttpClient) { }
+  getMaterias() {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
 
-  getMaterias(){
-    return this.httpClient.get<Array<MateriaInterface>>(this.url); 
+    return this.httpClient.get<Array<MateriaResponseInterface>>(
+      `${this.url}/buscar`,
+      { headers }
+    );
   }
 
-  getMateriaById(id: string){
-    return this.httpClient.get<MateriaInterface>(this.url + `/${id}`);
+  getMateriaById(id: string) {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.httpClient.get<MateriaResponseInterface>(
+      `${this.url}/buscar/${id}`,
+      { headers }
+    );
+  }
+
+  getNomeMateriaById(id: string): Observable<string | null> {
+    return this.getMateriaById(id).pipe(
+      map((materia: MateriaResponseInterface | undefined) => {
+        return materia ? materia.nome : null;
+      })
+    );
   }
 }
